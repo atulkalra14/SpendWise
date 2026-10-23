@@ -1,0 +1,141 @@
+{
+  "_version": "1.83.0",
+  "sap.app": {
+    "id": "spendwise",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.22.0",
+      "toolsId": "c9e37387-cf35-4df8-a19d-bbf9477ecdc6"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/expenses/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.01"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.153.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "spendwise.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": false,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": false
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/tokens.css"
+        },
+        {
+          "uri": "css/components.css"
+        },
+        {
+          "uri": "css/layout.css"
+        },
+        {
+          "uri": "css/pages.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "spendwise.view",
+        "async": true,
+        "viewPath": "spendwise.view",
+        "bypassed": {
+          "target": "landing"
+        }
+      },
+      "routes": [
+        {
+          "name": "landing",
+          "pattern": ":?query:",
+          "target": [
+            "landing"
+          ]
+        },
+        {
+          "name": "profile",
+          "pattern": "profile",
+          "target": [
+            "profile"
+          ]
+        }
+      ],
+      "targets": {
+        "landing": {
+          "id": "landing",
+          "name": "templates.Landing"
+        },
+        "profile": {
+          "id": "profile",
+          "name": "templates.Profile"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "spendwise.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

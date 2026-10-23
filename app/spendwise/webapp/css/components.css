@@ -1,0 +1,547 @@
+/* Reusable SpendWise components. Applied to sap.m controls through style classes. */
+
+html,
+body {
+    font-family: var(--sw-font-sans);
+    color: var(--sw-navy);
+    background: var(--sw-bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+.sw-page,
+.sw-page > section {
+    background: var(--sw-bg);
+}
+
+/* ── Typography ─────────────────────────────────────────────── */
+.sw-display,
+.sw-display span {
+    font-family: var(--sw-font-sans);
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--sw-navy);
+    white-space: normal;
+}
+
+.sw-title,
+.sw-title span {
+    font-family: var(--sw-font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--sw-navy);
+}
+
+.sw-title-lg,
+.sw-title-lg span {
+    font-family: var(--sw-font-sans);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--sw-navy);
+}
+
+.sw-body,
+.sw-body-strong,
+.sw-caption,
+.sw-overline,
+.sw-lead {
+    font-family: var(--sw-font-sans);
+    white-space: normal;
+}
+
+.sw-lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--sw-text-secondary);
+}
+
+.sw-body {
+    font-size: 0.875rem;
+    color: var(--sw-navy);
+}
+
+.sw-body-strong {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sw-navy);
+}
+
+.sw-caption {
+    font-size: 0.75rem;
+    color: var(--sw-text-secondary);
+}
+
+.sw-overline {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sw-text-secondary);
+}
+
+.sw-tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Card ───────────────────────────────────────────────────── */
+.sw-card {
+    background: var(--sw-card);
+    border: 1px solid var(--sw-border);
+    border-radius: var(--sw-radius-lg);
+    padding: var(--sw-space-5);
+    box-shadow: var(--sw-shadow-sm);
+    box-sizing: border-box;
+}
+
+.sw-card-header {
+    margin-bottom: var(--sw-space-4);
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.sapMBtn.sw-btn {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    min-width: 0;
+}
+
+.sapMBtn.sw-btn .sapMBtnInner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sw-space-2);
+    height: 36px;
+    min-width: 0;
+    padding: 0 var(--sw-space-4);
+    border: 1px solid transparent;
+    border-radius: var(--sw-radius-md);
+    box-shadow: none;
+    font-family: var(--sw-font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.sapMBtn.sw-btn .sapMBtnIcon,
+.sapMBtn.sw-btn .sapMBtnContent {
+    color: inherit;
+    font-family: var(--sw-font-sans);
+}
+
+.sapMBtn.sw-btn .sapMBtnIcon {
+    font-size: 1rem;
+    margin: 0;
+    width: auto;
+}
+
+.sapMBtn.sw-btn.sw-btn-primary .sapMBtnInner {
+    background: var(--sw-navy);
+    color: #fff;
+}
+
+.sapMBtn.sw-btn.sw-btn-primary:hover .sapMBtnInner {
+    background: var(--sw-navy-700);
+}
+
+.sapMBtn.sw-btn.sw-btn-accent .sapMBtnInner {
+    background: var(--sw-emerald);
+    color: #fff;
+}
+
+.sapMBtn.sw-btn.sw-btn-accent:hover .sapMBtnInner {
+    background: var(--sw-emerald-hover);
+}
+
+.sapMBtn.sw-btn.sw-btn-outline .sapMBtnInner {
+    background: var(--sw-card);
+    border-color: var(--sw-border);
+    color: var(--sw-navy);
+}
+
+.sapMBtn.sw-btn.sw-btn-outline:hover .sapMBtnInner {
+    background: var(--sw-bg);
+}
+
+.sapMBtn.sw-btn.sw-btn-ghost .sapMBtnInner {
+    color: var(--sw-navy);
+}
+
+.sapMBtn.sw-btn.sw-btn-ghost:hover .sapMBtnInner {
+    background: var(--sw-bg);
+}
+
+.sapMBtn.sw-btn.sw-btn-danger .sapMBtnInner {
+    background: var(--sw-card);
+    border-color: var(--sw-red);
+    color: var(--sw-red-dark);
+}
+
+.sapMBtn.sw-btn.sw-btn-danger:hover .sapMBtnInner {
+    background: var(--sw-red-light);
+}
+
+.sapMBtn.sw-btn:focus-visible .sapMBtnInner,
+.sapMBtn.sw-btn.sapMBtnFocusable:focus .sapMBtnInner {
+    outline: 2px solid var(--sw-navy-400);
+    outline-offset: 2px;
+}
+
+.sapMBtn.sw-icon-btn,
+.sapMBtn.sw-icon-btn:hover {
+    border: 0;
+    box-shadow: none;
+}
+
+.sapMBtn.sw-icon-btn .sapMBtnInner,
+.sapMBtn.sw-icon-btn:hover .sapMBtnInner {
+    border: 1px solid transparent;
+    box-shadow: none;
+}
+
+.sapMBtn.sw-icon-btn .sapMBtnInner {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: var(--sw-radius-sm);
+    background: transparent;
+    color: var(--sw-text-secondary);
+}
+
+.sapMBtn.sw-icon-btn .sapMBtnIcon {
+    color: inherit;
+    margin: 0;
+    width: auto;
+    font-size: 1.125rem;
+}
+
+.sapMBtn.sw-icon-btn:hover .sapMBtnInner {
+    background: var(--sw-bg);
+    color: var(--sw-navy);
+}
+
+/* ── Inputs, dropdowns, switches ────────────────────────────── */
+.sw-field {
+    min-width: 0;
+}
+
+.sw-field .sapMLabel {
+    font-family: var(--sw-font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--sw-navy);
+    margin-bottom: var(--sw-space-1);
+}
+
+.sw-input.sapMInputBase .sapMInputBaseContentWrapper,
+.sw-input.sapMSlt {
+    height: 40px;
+    border: 1px solid var(--sw-border);
+    border-radius: var(--sw-radius-md);
+    background: var(--sw-card);
+    box-shadow: none;
+}
+
+.sw-input.sapMSlt {
+    width: 100%;
+    max-width: none;
+}
+
+.sw-input .sapMInputBaseInner,
+.sw-input .sapMSltLabel {
+    font-family: var(--sw-font-sans);
+    font-size: 0.875rem;
+    color: var(--sw-navy);
+}
+
+.sw-input.sapMInputBase.sapMInputBaseDisabled .sapMInputBaseContentWrapper {
+    background: var(--sw-bg);
+    opacity: 1;
+}
+
+.sw-input.sapMInputBase:hover:not(.sapMInputBaseDisabled) .sapMInputBaseContentWrapper,
+.sw-input.sapMSlt:hover {
+    border-color: var(--sw-navy-200);
+}
+
+.sw-input.sapMInputBase.sapMFocus .sapMInputBaseContentWrapper,
+.sw-input.sapMSlt.sapMSltFocused {
+    border-color: var(--sw-navy-400);
+    outline: 2px solid rgba(15, 23, 41, 0.1);
+    outline-offset: 0;
+}
+
+.sw-switch {
+    --sapButton_Track_Selected_Background: var(--sw-emerald);
+    --sapButton_Track_Selected_BorderColor: var(--sw-emerald);
+    --sapButton_Track_Selected_Hover_Background: var(--sw-emerald-hover);
+    --sapButton_Track_Selected_Hover_BorderColor: var(--sw-emerald-hover);
+    --sapButton_Handle_Selected_Background: #fff;
+    --sapButton_Handle_Selected_BorderColor: #fff;
+    --sapButton_Handle_Selected_TextColor: var(--sw-emerald-dark);
+    --sapButton_Track_Background: var(--sw-navy-200);
+    --sapButton_Track_BorderColor: var(--sw-navy-200);
+    --sapButton_Track_Hover_Background: var(--sw-muted);
+    --sapButton_Track_Hover_BorderColor: var(--sw-muted);
+    --sapButton_Handle_Background: #fff;
+    --sapButton_Handle_BorderColor: #fff;
+    --sapButton_Handle_TextColor: var(--sw-navy-600);
+}
+
+/* ── Badges ─────────────────────────────────────────────────── */
+.sw-badge {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px;
+    border-radius: var(--sw-radius-pill);
+    font-family: var(--sw-font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: nowrap;
+    background: var(--sw-navy-100);
+    color: var(--sw-navy-600);
+}
+
+.sw-badge-success {
+    background: var(--sw-emerald-light);
+    color: var(--sw-emerald-dark);
+}
+
+.sw-badge-warning {
+    background: var(--sw-amber-light);
+    color: var(--sw-amber-dark);
+}
+
+.sw-badge-danger {
+    background: var(--sw-red-light);
+    color: var(--sw-red-dark);
+}
+
+.sw-badge-info {
+    background: var(--sw-blue-light);
+    color: var(--sw-blue-dark);
+}
+
+/* ── Tabs (pill) ────────────────────────────────────────────── */
+.sw-tabs.sapMSegB {
+    display: inline-flex;
+    padding: 4px;
+    gap: 2px;
+    border: 1px solid var(--sw-border);
+    border-radius: var(--sw-radius-md);
+    background: var(--sw-card);
+    box-shadow: none;
+    max-width: 100%;
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtn,
+.sw-tabs.sapMSegB .sapMSegBBtn:hover,
+.sw-tabs.sapMSegB .sapMSegBBtn.sapMSegBBtnSel {
+    border: 0;
+    border-radius: var(--sw-radius-sm);
+    background: transparent;
+    box-shadow: none;
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtn::before,
+.sw-tabs.sapMSegB .sapMSegBBtn::after {
+    display: none;
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtnInnerWrapper,
+.sw-tabs.sapMSegB .sapMSegBBtnInner {
+    border: 0;
+    border-radius: var(--sw-radius-sm);
+    background: transparent;
+    box-shadow: none;
+    color: var(--sw-text-secondary);
+    font-family: var(--sw-font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtnInner * {
+    color: inherit;
+    font-family: var(--sw-font-sans);
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtn:hover .sapMSegBBtnInnerWrapper,
+.sw-tabs.sapMSegB .sapMSegBBtn:hover .sapMSegBBtnInner {
+    background: var(--sw-bg);
+    color: var(--sw-navy);
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtnInnerWrapper::before,
+.sw-tabs.sapMSegB .sapMSegBBtnInnerWrapper::after,
+.sw-tabs.sapMSegB .sapMSegBBtnInner::before,
+.sw-tabs.sapMSegB .sapMSegBBtnInner::after {
+    display: none;
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtn:focus {
+    outline: none;
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtn:focus-visible .sapMSegBBtnInnerWrapper {
+    outline: 2px solid var(--sw-navy-400);
+    outline-offset: 2px;
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtnSel .sapMSegBBtnInnerWrapper,
+.sw-tabs.sapMSegB .sapMSegBBtnSel .sapMSegBBtnInner,
+.sw-tabs.sapMSegB .sapMSegBBtnSel:hover .sapMSegBBtnInnerWrapper,
+.sw-tabs.sapMSegB .sapMSegBBtnSel:hover .sapMSegBBtnInner,
+.sw-tabs.sapMSegB .sapMSegBBtnSel:focus .sapMSegBBtnInnerWrapper,
+.sw-tabs.sapMSegB .sapMSegBBtnSel:focus .sapMSegBBtnInner,
+.sw-tabs.sapMSegB .sapMSegBBtnSel:active .sapMSegBBtnInnerWrapper,
+.sw-tabs.sapMSegB .sapMSegBBtnSel:active .sapMSegBBtnInner {
+    background: var(--sw-navy);
+    color: #fff;
+}
+
+/* Horizon repaints the inner element in focus-from-touch states with a more specific rule.
+   The wrapper carries the tab fill, so the inner stays transparent in every state. */
+.sw-tabs.sapMSegB .sapMSegBBtnInner {
+    background: transparent !important;
+}
+
+.sw-tabs.sapMSegB .sapMSegBBtn .sapMSegBBtnInner .sapMBtnIcon {
+    color: inherit;
+}
+
+@media (max-width: 768px) {
+    .sw-tabs.sapMSegB {
+        display: flex;
+        width: 100%;
+    }
+
+    .sw-tabs.sapMSegB .sapMSegBBtnInnerWrapper,
+    .sw-tabs.sapMSegB .sapMSegBBtnInner {
+        font-size: 0.8125rem;
+    }
+
+    .sw-tabs.sapMSegB .sapMSegBBtnInner .sapUiIcon {
+        display: none;
+    }
+}
+
+/* ── Icon tile (stat cards, feature cards) ──────────────────── */
+.sw-icon-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--sw-radius-sm);
+    background: var(--sw-bg);
+    color: var(--sw-text-secondary);
+}
+
+.sw-icon-tile .sapUiIcon {
+    color: inherit;
+    font-size: 1rem;
+}
+
+.sw-icon-tile[data-tone="emerald"] {
+    background: var(--sw-emerald-light);
+    color: var(--sw-emerald);
+}
+
+.sw-icon-tile[data-tone="red"] {
+    background: var(--sw-red-light);
+    color: var(--sw-red);
+}
+
+.sw-icon-tile[data-tone="amber"] {
+    background: var(--sw-amber-light);
+    color: var(--sw-amber);
+}
+
+.sw-icon-tile[data-tone="blue"] {
+    background: var(--sw-blue-light);
+    color: var(--sw-blue);
+}
+
+.sw-icon-tile[data-tone="purple"] {
+    background: var(--sw-purple-light);
+    color: var(--sw-purple);
+}
+
+.sw-icon-tile[data-tone="navy"] {
+    background: var(--sw-navy-100);
+    color: var(--sw-navy-600);
+}
+
+.sw-icon-tile-lg {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--sw-radius-md);
+}
+
+.sw-icon-tile-lg .sapUiIcon {
+    font-size: 1.25rem;
+}
+
+/* ── Stat card ──────────────────────────────────────────────── */
+.sw-stat-value,
+.sw-stat-value span {
+    font-family: var(--sw-font-sans);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--sw-navy);
+}
+
+/* ── Setting row (label + control) ──────────────────────────── */
+.sw-setting-row {
+    padding: var(--sw-space-4) 0;
+    border-bottom: 1px solid var(--sw-border);
+    gap: var(--sw-space-4);
+}
+
+.sw-setting-row:last-child {
+    border-bottom: 0;
+}
+
+/* ── Progress bar (budgets): fill width comes from FlexItemData baseSize ── */
+.sw-bar {
+    width: 100%;
+    height: 6px;
+    border-radius: var(--sw-radius-pill);
+    background: var(--sw-bg);
+    overflow: hidden;
+}
+
+.sw-bar-fill {
+    height: 100%;
+    border-radius: var(--sw-radius-pill);
+    background: var(--sw-emerald);
+    transition: flex-basis 0.5s;
+}
+
+.sw-bar-fill[data-state="warning"] {
+    background: var(--sw-amber);
+}
+
+.sw-bar-fill[data-state="danger"] {
+    background: var(--sw-red);
+}
+
+/* ── Avatar ─────────────────────────────────────────────────── */
+.sapFAvatar.sw-avatar {
+    background: var(--sw-emerald-dark);
+    color: #fff;
+    font-family: var(--sw-font-sans);
+    font-weight: 600;
+}
+
+.sapFAvatar.sw-avatar .sapFAvatarInitialsHolder {
+    color: #fff;
+}

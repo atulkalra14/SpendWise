@@ -1,0 +1,17 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <!-- Top header: sidebar toggle, page title from ui>/title and ui>/subtitle, search, notifications, quick add -->
+    <HBox class="sw-header" alignItems="Center" renderType="Bare">
+        <Button class="sw-icon-btn sw-header-toggle" type="Transparent" icon="sap-icon://menu2" tooltip="{i18n>toggleSidebar}" press=".onToggleSidebar"/>
+
+        <VBox class="sw-header-title" renderType="Bare">
+            <Title text="{ui>/title}" titleStyle="H1" class="sw-title"/>
+            <Text text="{ui>/subtitle}" class="sw-caption"/>
+        </VBox>
+
+        <Button class="sw-icon-btn" type="Transparent" icon="sap-icon://search" tooltip="{i18n>search}" press=".onNavPress"/>
+        <Button class="sw-icon-btn sw-has-dot" type="Transparent" icon="sap-icon://bell" tooltip="{i18n>notifications}" press=".onNavPress"/>
+        <Button class="sw-btn sw-btn-primary sw-add-text" type="Transparent" icon="sap-icon://add" text="{i18n>add}" tooltip="{i18n>addTransaction}" press=".onNavPress"/>
+    </HBox>
+</core:FragmentDefinition>

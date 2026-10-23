@@ -1,0 +1,70 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <!-- Desktop navigation: 240px wide, icons only when ui>/sidebarCollapsed is true. Hidden on phones. -->
+    <VBox class="sw-sidebar" renderType="Bare">
+        <customData>
+            <core:CustomData key="collapsed" value="{= ${ui>/sidebarCollapsed} ? 'true' : 'false' }" writeToDom="true"/>
+        </customData>
+
+        <HBox class="sw-sidebar-logo" alignItems="Center" renderType="Bare">
+            <core:Fragment fragmentName="spendwise.view.fragments.ui.Logo" type="XML"/>
+        </HBox>
+
+        <VBox class="sw-sidebar-nav" renderType="Bare">
+            <Text text="{i18n>navMain}" class="sw-overline sw-sidebar-label"/>
+            <Button class="sw-nav-item" type="Transparent" icon="sap-icon://home" text="{i18n>navOverview}" tooltip="{i18n>navOverview}" press=".onNavPress">
+                <customData>
+                    <core:CustomData key="active" value="{= ${ui>/nav} === 'overview' ? 'true' : 'false' }" writeToDom="true"/>
+                </customData>
+            </Button>
+            <Button class="sw-nav-item" type="Transparent" icon="sap-icon://money-bills" text="{i18n>navTransactions}" tooltip="{i18n>navTransactions}" press=".onNavPress">
+                <customData>
+                    <core:CustomData key="active" value="{= ${ui>/nav} === 'transactions' ? 'true' : 'false' }" writeToDom="true"/>
+                </customData>
+            </Button>
+            <Button class="sw-nav-item" type="Transparent" icon="sap-icon://calendar" text="{i18n>navCalendar}" tooltip="{i18n>navCalendar}" press=".onNavPress">
+                <customData>
+                    <core:CustomData key="active" value="{= ${ui>/nav} === 'calendar' ? 'true' : 'false' }" writeToDom="true"/>
+                </customData>
+            </Button>
+            <Button class="sw-nav-item" type="Transparent" icon="sap-icon://bar-chart" text="{i18n>navAnalysis}" tooltip="{i18n>navAnalysis}" press=".onNavPress">
+                <customData>
+                    <core:CustomData key="active" value="{= ${ui>/nav} === 'analysis' ? 'true' : 'false' }" writeToDom="true"/>
+                </customData>
+            </Button>
+            <Button class="sw-nav-item" type="Transparent" icon="sap-icon://target-group" text="{i18n>navBudgets}" tooltip="{i18n>navBudgets}" press=".onNavPress">
+                <customData>
+                    <core:CustomData key="active" value="{= ${ui>/nav} === 'budgets' ? 'true' : 'false' }" writeToDom="true"/>
+                </customData>
+            </Button>
+            <Button class="sw-nav-item" type="Transparent" icon="sap-icon://tag" text="{i18n>navCategories}" tooltip="{i18n>navCategories}" press=".onNavPress">
+                <customData>
+                    <core:CustomData key="active" value="{= ${ui>/nav} === 'categories' ? 'true' : 'false' }" writeToDom="true"/>
+                </customData>
+            </Button>
+        </VBox>
+
+        <VBox class="sw-sidebar-footer" renderType="Bare">
+            <Button class="sw-nav-item" type="Transparent" icon="sap-icon://action-settings" text="{i18n>navSettings}" tooltip="{i18n>navSettings}" press=".onNavPress">
+                <customData>
+                    <core:CustomData key="active" value="{= ${ui>/nav} === 'settings' ? 'true' : 'false' }" writeToDom="true"/>
+                </customData>
+            </Button>
+
+            <!-- User profile area: opens the profile dashboard -->
+            <HBox class="sw-user" alignItems="Center" renderType="Bare" tooltip="{i18n>navProfile}">
+                <customData>
+                    <core:CustomData key="active" value="{= ${ui>/nav} === 'profile' ? 'true' : 'false' }" writeToDom="true"/>
+                </customData>
+                <Avatar initials="{profile>/initials}" displaySize="XS" class="sw-avatar" press=".onOpenProfile"/>
+                <VBox class="sw-user-meta" renderType="Bare">
+                    <Text text="{profile>/name}" class="sw-user-name"/>
+                    <Text text="{profile>/email}" class="sw-user-email"/>
+                </VBox>
+            </HBox>
+
+            <Button class="sw-nav-item sw-nav-danger" type="Transparent" icon="sap-icon://log" text="{i18n>signOut}" tooltip="{i18n>signOut}" press=".onSignOut"/>
+        </VBox>
+    </VBox>
+</core:FragmentDefinition>

@@ -1,0 +1,201 @@
+/* Page-specific styles. Shared building blocks live in components.css and layout.css. */
+
+/* ── Landing ────────────────────────────────────────────────── */
+.sw-landing,
+.sw-landing > section {
+    background: var(--sw-card);
+}
+
+.sw-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: var(--sw-space-6);
+    padding-right: var(--sw-space-6);
+    box-sizing: border-box;
+}
+
+.sw-landing-nav {
+    height: 72px;
+}
+
+.sw-landing-actions {
+    gap: var(--sw-space-2);
+}
+
+.sw-landing-hero {
+    background: radial-gradient(ellipse at 80% 0%, var(--sw-emerald-light), transparent 55%), var(--sw-card);
+}
+
+.sw-hero-inner {
+    padding-top: var(--sw-space-12);
+    padding-bottom: calc(var(--sw-space-12) + var(--sw-space-6));
+}
+
+.sw-hero-copy {
+    gap: var(--sw-space-5);
+    align-self: center;
+}
+
+.sw-hero-actions {
+    gap: var(--sw-space-3);
+    flex-wrap: wrap;
+}
+
+.sw-hero-trust {
+    gap: var(--sw-space-2);
+    margin-top: var(--sw-space-2);
+}
+
+.sw-trust-item {
+    gap: var(--sw-space-2);
+}
+
+.sw-trust-item .sapUiIcon {
+    color: var(--sw-emerald);
+    font-size: 1rem;
+}
+
+.sw-preview {
+    align-self: center;
+    box-shadow: var(--sw-shadow-lg);
+    padding: var(--sw-space-6);
+    gap: var(--sw-space-5);
+}
+
+.sw-preview-kpis {
+    gap: var(--sw-space-4);
+    flex-wrap: wrap;
+}
+
+.sw-preview-kpi {
+    flex: 1 1 120px;
+    min-width: 0;
+    padding: var(--sw-space-3);
+    border-radius: var(--sw-radius-md);
+    background: var(--sw-bg);
+}
+
+.sw-amount-positive,
+.sw-amount-positive span {
+    color: var(--sw-emerald-dark);
+}
+
+.sw-amount-negative,
+.sw-amount-negative span {
+    color: var(--sw-red-dark);
+}
+
+.sw-budget-row {
+    gap: 6px;
+}
+
+.sw-section {
+    padding-top: calc(var(--sw-space-12) + var(--sw-space-4));
+    padding-bottom: calc(var(--sw-space-12) + var(--sw-space-4));
+    background: var(--sw-bg);
+}
+
+.sw-section-head {
+    gap: var(--sw-space-2);
+    margin-bottom: var(--sw-space-8);
+    max-width: 720px;
+}
+
+.sw-preview-kpi .sw-stat-value,
+.sw-preview-kpi .sw-stat-value span {
+    white-space: nowrap;
+}
+
+.sw-feature {
+    gap: var(--sw-space-3);
+    padding: var(--sw-space-6);
+}
+
+.sw-landing-footer {
+    padding-top: var(--sw-space-8);
+    padding-bottom: var(--sw-space-8);
+    border-top: 1px solid var(--sw-border);
+    background: var(--sw-card);
+}
+
+@media (max-width: 768px) {
+    .sw-display,
+    .sw-display span {
+        font-size: 2.25rem;
+    }
+
+    .sw-hero-inner {
+        padding-top: var(--sw-space-6);
+    }
+
+    .sw-container {
+        padding-left: var(--sw-space-4);
+        padding-right: var(--sw-space-4);
+    }
+}
+
+/* ── Profile ────────────────────────────────────────────────── */
+.sw-profile-hero {
+    gap: var(--sw-space-5);
+    padding: var(--sw-space-6);
+}
+
+.sw-profile-identity {
+    flex: 1 1 240px;
+    min-width: 0;
+    gap: var(--sw-space-1);
+}
+
+.sw-profile-badges {
+    gap: var(--sw-space-2);
+    margin-top: var(--sw-space-2);
+}
+
+.sw-profile-actions {
+    gap: var(--sw-space-2);
+}
+
+.sw-profile-panel {
+    padding: var(--sw-space-6);
+}
+
+.sw-panel-footer {
+    gap: var(--sw-space-2);
+    margin-top: var(--sw-space-6);
+    padding-top: var(--sw-space-4);
+    border-top: 1px solid var(--sw-border);
+}
+
+.sw-session {
+    gap: var(--sw-space-3);
+    padding: var(--sw-space-3) 0;
+    border-bottom: 1px solid var(--sw-border);
+}
+
+.sw-session:last-child {
+    border-bottom: 0;
+}
+
+.sw-session .sw-badge {
+    margin-left: auto;
+}
+
+.sw-hint {
+    margin-top: var(--sw-space-1);
+}
+
+@media (max-width: 768px) {
+    .sw-profile-hero,
+    .sw-profile-panel {
+        padding: var(--sw-space-4);
+    }
+
+    .sw-profile-actions {
+        width: 100%;
+    }
+
+    .sw-stat .sw-icon-tile {
+        display: none;
+    }
+}

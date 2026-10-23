@@ -1,0 +1,117 @@
+<mvc:View controllerName="spendwise.controller.templates.Landing"
+    displayBlock="true"
+    height="100%"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:grid="sap.ui.layout.cssgrid"
+    xmlns="sap.m">
+    <Page id="landingPage" showHeader="false" enableScrolling="true" class="sw-page sw-landing">
+
+        <!-- Hero -->
+        <VBox class="sw-landing-hero" renderType="Bare">
+            <HBox class="sw-container sw-landing-nav" alignItems="Center" justifyContent="SpaceBetween" renderType="Bare">
+                <core:Fragment fragmentName="spendwise.view.fragments.ui.Logo" type="XML"/>
+                <HBox class="sw-landing-actions" alignItems="Center" renderType="Bare">
+                    <Button class="sw-btn sw-btn-ghost" type="Transparent" text="{i18n>signIn}" press=".onSignIn"/>
+                    <Button class="sw-btn sw-btn-primary" type="Transparent" text="{i18n>getStarted}" press=".onGetStarted"/>
+                </HBox>
+            </HBox>
+
+            <grid:CSSGrid class="sw-container sw-hero-inner" gridTemplateColumns="repeat(auto-fit, minmax(320px, 1fr))" gridGap="48px">
+                <VBox class="sw-hero-copy" renderType="Bare">
+                    <Text text="{i18n>landingBadge}" class="sw-badge sw-badge-success"/>
+                    <Title text="{i18n>landingHeadline}" titleStyle="H1" wrapping="true" class="sw-display"/>
+                    <Text text="{i18n>landingSubline}" class="sw-lead"/>
+                    <HBox class="sw-hero-actions" renderType="Bare">
+                        <Button class="sw-btn sw-btn-primary" type="Transparent" text="{i18n>getStarted}" press=".onGetStarted"/>
+                        <Button class="sw-btn sw-btn-outline" type="Transparent" text="{i18n>signIn}" press=".onSignIn"/>
+                    </HBox>
+                    <VBox class="sw-hero-trust" renderType="Bare">
+                        <HBox class="sw-trust-item" alignItems="Center" renderType="Bare">
+                            <core:Icon src="sap-icon://sys-enter-2" decorative="true"/>
+                            <Text text="{i18n>trustPrivate}" class="sw-body"/>
+                        </HBox>
+                        <HBox class="sw-trust-item" alignItems="Center" renderType="Bare">
+                            <core:Icon src="sap-icon://sys-enter-2" decorative="true"/>
+                            <Text text="{i18n>trustAccurate}" class="sw-body"/>
+                        </HBox>
+                        <HBox class="sw-trust-item" alignItems="Center" renderType="Bare">
+                            <core:Icon src="sap-icon://sys-enter-2" decorative="true"/>
+                            <Text text="{i18n>trustClean}" class="sw-body"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Product preview card (sample data) -->
+                <VBox class="sw-card sw-preview" renderType="Bare">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" renderType="Bare">
+                        <Title text="{i18n>previewTitle}" titleStyle="H3" class="sw-title"/>
+                        <Text text="{i18n>previewSample}" class="sw-badge sw-badge-warning"/>
+                    </HBox>
+                    <HBox class="sw-preview-kpis" renderType="Bare">
+                        <VBox class="sw-preview-kpi" renderType="Bare">
+                            <Text text="{i18n>previewIncome}" class="sw-overline"/>
+                            <Text text="€4,800.00" class="sw-stat-value sw-amount-positive"/>
+                        </VBox>
+                        <VBox class="sw-preview-kpi" renderType="Bare">
+                            <Text text="{i18n>previewExpenses}" class="sw-overline"/>
+                            <Text text="€2,850.00" class="sw-stat-value sw-amount-negative"/>
+                        </VBox>
+                        <VBox class="sw-preview-kpi" renderType="Bare">
+                            <Text text="{i18n>previewSaved}" class="sw-overline"/>
+                            <Text text="€1,950.00" class="sw-stat-value"/>
+                        </VBox>
+                    </HBox>
+                    <VBox renderType="Bare" items="{landing>/previewBudgets}">
+                        <VBox class="sw-budget-row sapUiTinyMarginBottom" renderType="Bare">
+                            <HBox justifyContent="SpaceBetween" renderType="Bare">
+                                <Text text="{landing>label}" class="sw-body"/>
+                                <Text text="{landing>amount}" class="sw-caption sw-tabular"/>
+                            </HBox>
+                            <HBox class="sw-bar" renderType="Bare">
+                                <HBox class="sw-bar-fill" renderType="Bare">
+                                    <customData>
+                                        <core:CustomData key="state" value="{landing>state}" writeToDom="true"/>
+                                    </customData>
+                                    <layoutData>
+                                        <FlexItemData baseSize="{= ${landing>pct} + '%' }" growFactor="0" shrinkFactor="0"/>
+                                    </layoutData>
+                                </HBox>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </grid:CSSGrid>
+        </VBox>
+
+        <!-- Features -->
+        <VBox class="sw-section" renderType="Bare">
+            <VBox class="sw-container" renderType="Bare">
+                <VBox class="sw-section-head" renderType="Bare">
+                    <Title text="{i18n>featuresTitle}" titleStyle="H2" class="sw-title-lg"/>
+                    <Text text="{i18n>featuresSubtitle}" class="sw-lead"/>
+                </VBox>
+                <grid:CSSGrid gridTemplateColumns="repeat(auto-fit, minmax(280px, 1fr))" gridGap="16px" items="{landing>/features}">
+                    <VBox class="sw-card sw-feature" renderType="Bare">
+                        <HBox class="sw-icon-tile sw-icon-tile-lg" renderType="Bare">
+                            <customData>
+                                <core:CustomData key="tone" value="{landing>tone}" writeToDom="true"/>
+                            </customData>
+                            <core:Icon src="{landing>icon}" decorative="true"/>
+                        </HBox>
+                        <Title text="{landing>title}" titleStyle="H3" class="sw-title"/>
+                        <Text text="{landing>text}" class="sw-body"/>
+                    </VBox>
+                </grid:CSSGrid>
+            </VBox>
+        </VBox>
+
+        <!-- Footer -->
+        <HBox class="sw-landing-footer" renderType="Bare">
+            <HBox class="sw-container" justifyContent="SpaceBetween" alignItems="Center" renderType="Bare">
+                <core:Fragment fragmentName="spendwise.view.fragments.ui.Logo" type="XML"/>
+                <Text text="{i18n>footerText}" class="sw-caption"/>
+            </HBox>
+        </HBox>
+    </Page>
+</mvc:View>

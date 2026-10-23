@@ -1,0 +1,211 @@
+<mvc:View controllerName="spendwise.controller.templates.Profile"
+    displayBlock="true"
+    height="100%"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:grid="sap.ui.layout.cssgrid"
+    xmlns="sap.m">
+    <Page id="profilePage" showHeader="false" enableScrolling="false" class="sw-page">
+        <HBox class="sw-shell" renderType="Bare">
+            <core:Fragment fragmentName="spendwise.view.fragments.layout.Sidebar" type="XML"/>
+
+            <VBox class="sw-main" renderType="Bare">
+                <core:Fragment fragmentName="spendwise.view.fragments.layout.Header" type="XML"/>
+
+                <VBox class="sw-content" renderType="Bare">
+                    <VBox class="sw-content-inner" renderType="Bare">
+
+                        <!-- Identity -->
+                        <HBox class="sw-card sw-profile-hero" alignItems="Center" wrap="Wrap" renderType="Bare">
+                            <Avatar initials="{profile>/initials}" displaySize="XL" class="sw-avatar"/>
+                            <VBox class="sw-profile-identity" renderType="Bare">
+                                <Title text="{profile>/name}" titleStyle="H2" class="sw-title-lg"/>
+                                <Text text="{profile>/email}" class="sw-body"/>
+                                <HBox class="sw-profile-badges" renderType="Bare">
+                                    <Text text="{i18n>badgeVerified}" class="sw-badge sw-badge-success"/>
+                                    <Text text="{i18n>badgePlanFree}" class="sw-badge"/>
+                                    <Text text="{i18n>badgeCurrency}" class="sw-badge sw-badge-info"/>
+                                </HBox>
+                            </VBox>
+                            <HBox class="sw-profile-actions" renderType="Bare">
+                                <Button class="sw-btn sw-btn-outline" type="Transparent" icon="sap-icon://camera" text="{i18n>changePhoto}" press=".onPreviewAction"/>
+                                <Button class="sw-btn sw-btn-primary" type="Transparent" icon="sap-icon://edit" text="{i18n>editProfile}" press=".onPreviewAction"/>
+                            </HBox>
+                        </HBox>
+
+                        <!-- Account stats -->
+                        <grid:CSSGrid gridTemplateColumns="repeat(auto-fit, minmax(160px, 1fr))" gridGap="16px" items="{profile>/stats}">
+                            <core:Fragment fragmentName="spendwise.view.fragments.ui.StatCard" type="XML"/>
+                        </grid:CSSGrid>
+
+                        <!-- Tabs -->
+                        <SegmentedButton selectedKey="{ui>/tab}" class="sw-tabs">
+                            <items>
+                                <SegmentedButtonItem key="personal" icon="sap-icon://person-placeholder" text="{i18n>tabPersonal}"/>
+                                <SegmentedButtonItem key="preferences" icon="sap-icon://action-settings" text="{i18n>tabPreferences}"/>
+                                <SegmentedButtonItem key="security" icon="sap-icon://shield" text="{i18n>tabSecurity}"/>
+                                <SegmentedButtonItem key="notifications" icon="sap-icon://bell" text="{i18n>tabNotifications}"/>
+                            </items>
+                        </SegmentedButton>
+
+                        <!-- Personal information -->
+                        <VBox class="sw-card sw-profile-panel" renderType="Bare" visible="{= ${ui>/tab} === 'personal' }">
+                            <VBox class="sw-card-header" renderType="Bare">
+                                <Title text="{i18n>personalTitle}" titleStyle="H3" class="sw-title"/>
+                                <Text text="{i18n>personalDescription}" class="sw-caption"/>
+                            </VBox>
+                            <grid:CSSGrid gridTemplateColumns="repeat(auto-fit, minmax(240px, 1fr))" gridGap="16px">
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>firstName}" labelFor="firstName"/>
+                                    <Input id="firstName" class="sw-input" value="{profile>/firstName}"/>
+                                </VBox>
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>lastName}" labelFor="lastName"/>
+                                    <Input id="lastName" class="sw-input" value="{profile>/lastName}"/>
+                                </VBox>
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>email}" labelFor="email"/>
+                                    <Input id="email" class="sw-input" value="{profile>/email}" type="Email" enabled="false"/>
+                                    <Text text="{i18n>emailHint}" class="sw-caption sw-hint"/>
+                                </VBox>
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>phone}" labelFor="phone"/>
+                                    <Input id="phone" class="sw-input" value="{profile>/phone}" type="Tel"/>
+                                </VBox>
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>country}" labelFor="country"/>
+                                    <Select id="country" class="sw-input" selectedKey="{profile>/country}" forceSelection="false">
+                                        <core:Item key="DE" text="Germany"/>
+                                        <core:Item key="AT" text="Austria"/>
+                                        <core:Item key="FR" text="France"/>
+                                        <core:Item key="NL" text="Netherlands"/>
+                                        <core:Item key="ES" text="Spain"/>
+                                    </Select>
+                                </VBox>
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>timezone}" labelFor="timezone"/>
+                                    <Select id="timezone" class="sw-input" selectedKey="{profile>/timezone}" forceSelection="false">
+                                        <core:Item key="Europe/Berlin" text="Europe/Berlin (CET)"/>
+                                        <core:Item key="Europe/London" text="Europe/London (GMT)"/>
+                                        <core:Item key="Europe/Paris" text="Europe/Paris (CET)"/>
+                                    </Select>
+                                </VBox>
+                            </grid:CSSGrid>
+                            <HBox class="sw-panel-footer" justifyContent="End" renderType="Bare">
+                                <Button class="sw-btn sw-btn-outline" type="Transparent" text="{i18n>cancel}" press=".onPreviewAction"/>
+                                <Button class="sw-btn sw-btn-primary" type="Transparent" text="{i18n>saveChanges}" press=".onSave"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Preferences -->
+                        <VBox class="sw-card sw-profile-panel" renderType="Bare" visible="{= ${ui>/tab} === 'preferences' }">
+                            <VBox class="sw-card-header" renderType="Bare">
+                                <Title text="{i18n>preferencesTitle}" titleStyle="H3" class="sw-title"/>
+                                <Text text="{i18n>preferencesDescription}" class="sw-caption"/>
+                            </VBox>
+                            <grid:CSSGrid gridTemplateColumns="repeat(auto-fit, minmax(240px, 1fr))" gridGap="16px">
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>currency}" labelFor="currency"/>
+                                    <Select id="currency" class="sw-input" selectedKey="{profile>/currency}">
+                                        <core:Item key="EUR" text="Euro (EUR)"/>
+                                    </Select>
+                                    <Text text="{i18n>currencyHint}" class="sw-caption sw-hint"/>
+                                </VBox>
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>language}" labelFor="language"/>
+                                    <Select id="language" class="sw-input" selectedKey="{profile>/language}">
+                                        <core:Item key="en" text="English"/>
+                                        <core:Item key="de" text="Deutsch"/>
+                                    </Select>
+                                </VBox>
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>dateFormat}" labelFor="dateFormat"/>
+                                    <Select id="dateFormat" class="sw-input" selectedKey="{profile>/dateFormat}">
+                                        <core:Item key="dd.MM.yyyy" text="31.12.2026"/>
+                                        <core:Item key="yyyy-MM-dd" text="2026-12-31"/>
+                                        <core:Item key="MM/dd/yyyy" text="12/31/2026"/>
+                                    </Select>
+                                </VBox>
+                                <VBox class="sw-field" renderType="Bare">
+                                    <Label text="{i18n>weekStart}" labelFor="weekStart"/>
+                                    <Select id="weekStart" class="sw-input" selectedKey="{profile>/weekStart}">
+                                        <core:Item key="monday" text="Monday"/>
+                                        <core:Item key="sunday" text="Sunday"/>
+                                    </Select>
+                                </VBox>
+                            </grid:CSSGrid>
+                            <HBox class="sw-panel-footer" justifyContent="End" renderType="Bare">
+                                <Button class="sw-btn sw-btn-outline" type="Transparent" text="{i18n>cancel}" press=".onPreviewAction"/>
+                                <Button class="sw-btn sw-btn-primary" type="Transparent" text="{i18n>saveChanges}" press=".onSave"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Security -->
+                        <VBox renderType="Bare" visible="{= ${ui>/tab} === 'security' }">
+                            <VBox class="sw-card sw-profile-panel" renderType="Bare">
+                                <VBox class="sw-card-header" renderType="Bare">
+                                    <Title text="{i18n>securityTitle}" titleStyle="H3" class="sw-title"/>
+                                    <Text text="{i18n>securityDescription}" class="sw-caption"/>
+                                </VBox>
+                                <HBox class="sw-setting-row" alignItems="Center" justifyContent="SpaceBetween" renderType="Bare">
+                                    <VBox renderType="Bare">
+                                        <Text text="{i18n>passwordTitle}" class="sw-body-strong"/>
+                                        <Text text="{i18n>passwordHint}" class="sw-caption"/>
+                                    </VBox>
+                                    <Button class="sw-btn sw-btn-outline" type="Transparent" icon="sap-icon://locked" text="{i18n>changePassword}" press=".onPreviewAction"/>
+                                </HBox>
+                                <VBox renderType="Bare" items="{profile>/securityToggles}">
+                                    <core:Fragment fragmentName="spendwise.view.fragments.ui.SettingRow" type="XML"/>
+                                </VBox>
+                            </VBox>
+
+                            <VBox class="sw-card sw-profile-panel sapUiSmallMarginTop" renderType="Bare">
+                                <VBox class="sw-card-header" renderType="Bare">
+                                    <Title text="{i18n>sessionsTitle}" titleStyle="H3" class="sw-title"/>
+                                    <Text text="{i18n>sessionsDescription}" class="sw-caption"/>
+                                </VBox>
+                                <VBox renderType="Bare" items="{profile>/sessions}">
+                                    <HBox class="sw-session" alignItems="Center" renderType="Bare">
+                                        <HBox class="sw-icon-tile" renderType="Bare">
+                                            <core:Icon src="{profile>icon}" decorative="true"/>
+                                        </HBox>
+                                        <VBox renderType="Bare">
+                                            <Text text="{profile>device}" class="sw-body-strong"/>
+                                            <Text text="{profile>meta}" class="sw-caption"/>
+                                        </VBox>
+                                        <Text text="{i18n>thisDevice}" class="sw-badge sw-badge-success" visible="{profile>current}"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                            <VBox class="sw-card sw-profile-panel sapUiSmallMarginTop" renderType="Bare">
+                                <VBox class="sw-card-header" renderType="Bare">
+                                    <Title text="{i18n>dataTitle}" titleStyle="H3" class="sw-title"/>
+                                    <Text text="{i18n>dataDescription}" class="sw-caption"/>
+                                </VBox>
+                                <HBox class="sw-profile-actions" wrap="Wrap" renderType="Bare">
+                                    <Button class="sw-btn sw-btn-outline" type="Transparent" icon="sap-icon://download" text="{i18n>exportData}" press=".onPreviewAction"/>
+                                    <Button class="sw-btn sw-btn-danger" type="Transparent" icon="sap-icon://delete" text="{i18n>deleteAccount}" press=".onPreviewAction"/>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Notifications -->
+                        <VBox class="sw-card sw-profile-panel" renderType="Bare" visible="{= ${ui>/tab} === 'notifications' }">
+                            <VBox class="sw-card-header" renderType="Bare">
+                                <Title text="{i18n>notificationsTitle}" titleStyle="H3" class="sw-title"/>
+                                <Text text="{i18n>notificationsDescription}" class="sw-caption"/>
+                            </VBox>
+                            <VBox renderType="Bare" items="{profile>/notifications}">
+                                <core:Fragment fragmentName="spendwise.view.fragments.ui.SettingRow" type="XML"/>
+                            </VBox>
+                        </VBox>
+
+                    </VBox>
+                </VBox>
+            </VBox>
+        </HBox>
+
+        <core:Fragment fragmentName="spendwise.view.fragments.layout.BottomNav" type="XML"/>
+    </Page>
+</mvc:View>

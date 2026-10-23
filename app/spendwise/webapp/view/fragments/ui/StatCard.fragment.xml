@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <!-- Template for items bound to profile>/stats: label, value, hint, icon, tone -->
+    <VBox class="sw-card sw-stat" renderType="Bare">
+        <HBox justifyContent="SpaceBetween" alignItems="Start" renderType="Bare">
+            <Text text="{profile>label}" class="sw-overline"/>
+            <HBox class="sw-icon-tile" renderType="Bare">
+                <customData>
+                    <core:CustomData key="tone" value="{profile>tone}" writeToDom="true"/>
+                </customData>
+                <core:Icon src="{profile>icon}" decorative="true"/>
+            </HBox>
+        </HBox>
+        <Text text="{profile>value}" class="sw-stat-value sapUiTinyMarginTop"/>
+        <Text text="{profile>hint}" class="sw-caption sapUiTinyMarginTop"/>
+    </VBox>
+</core:FragmentDefinition>
