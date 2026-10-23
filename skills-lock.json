@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "sap-cap-capire": {
+      "source": "secondsky/sap-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/sap-cap-capire/skills/sap-cap-capire/SKILL.md",
+      "computedHash": "3dc2f1a4029dca36667364805971be7c89a0ad240862803f5ce7bf6bceb12aa1"
+    },
+    "sap-fiori-tools": {
+      "source": "secondsky/sap-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/sap-fiori-tools/skills/sap-fiori-tools/SKILL.md",
+      "computedHash": "d91968d0ca0b3551af53d3db3c7e581e9174ab6adf32029cff4d2ee72afb1539"
+    }
+  }
+}
