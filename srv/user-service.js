@@ -1,9 +1,7 @@
 const cds = require('@sap/cds')
 const { hashPassword } = require('./lib/password')
 const ensureUser = require('./lib/ensure-user')
-
-const MIN_PASSWORD_LENGTH = 12
-const MAX_PASSWORD_LENGTH = 128
+const { PASSWORD_MIN: MIN_PASSWORD_LENGTH, PASSWORD_MAX: MAX_PASSWORD_LENGTH } = require('./lib/validation')
 
 module.exports = class UserService extends cds.ApplicationService {
   init() {

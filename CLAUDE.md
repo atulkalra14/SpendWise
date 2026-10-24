@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project state
 
-SpendWise: a personal finance web app (income, expenses, budgets, recurring payments, product-level price tracking) built on SAP CAP (Node.js) with a SAPUI5/Fiori frontend. Existing so far: the `Expenses` entity and per-user `ExpenseService` (with a `monthlySummary` function), a Fiori app in `app/spendwise` (landing page and Overview page backed by `ExpenseService`), and, on branch `feature/user-schema`, a `Users` entity and `UserService`. Specs live in `.claude/specs/` and implementation plans in `.claude/plans/`. Anything below marked "planned" is a decision, not existing code.
+SpendWise: a personal finance web app (income, expenses, budgets, recurring payments, product-level price tracking) built on SAP CAP (Node.js) with a SAPUI5/Fiori frontend. Existing so far: the `Expenses` entity and per-user `ExpenseService` (with a `monthlySummary` function), a Fiori app in `app/spendwise` (landing page and Overview page backed by `ExpenseService`), a `Users` entity and `UserService`, and, on branch `feature/registration`, a public `RegistrationService` (`register` action) with a `#/register` page in the Fiori app. Registration is for local/custom login only; on BTP, IAS owns sign-up. Specs live in `.claude/specs/` and implementation plans in `.claude/plans/`. Anything below marked "planned" is a decision, not existing code.
 
 ## Commands
 
@@ -36,3 +36,4 @@ Planned stack and decisions (see also the project memory):
 ## Working style
 
 Whereever possible use SAP FIORI tools and annotations to develop everything on frontend
+Draft enable all the services or schema you are creating

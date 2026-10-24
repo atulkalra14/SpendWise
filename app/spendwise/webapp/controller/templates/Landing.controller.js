@@ -62,13 +62,13 @@ sap.ui.define([
             (await this._pFeatureDialog).close();
         },
 
-        // Placeholder until authentication exists: both actions open the app's home page.
+        // Placeholder until login exists: sign in still opens the app's home page.
         onSignIn() {
             this.navTo("overview");
         },
 
         onGetStarted() {
-            this.navTo("overview");
+            this.navTo("register");
         }
     });
 });
