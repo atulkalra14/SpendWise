@@ -1,5 +1,6 @@
 const cds = require('@sap/cds')
 const { hashPassword } = require('./lib/password')
+const ensureUser = require('./lib/ensure-user')
 
 const MIN_PASSWORD_LENGTH = 12
 const MAX_PASSWORD_LENGTH = 128
@@ -7,15 +8,6 @@ const MAX_PASSWORD_LENGTH = 128
 module.exports = class UserService extends cds.ApplicationService {
   init() {
     const { Users } = cds.entities('spendwise')
-
-    // The profile row is created the first time a signed-in user touches the service.
-    // It goes through cds.db so the service restriction does not apply, and the key always
-    // comes from the authenticated user, never from the request payload.
-    const ensureUser = async (req) => {
-      const id = req.user.id
-      const existing = await SELECT.one.from(Users).columns('ID').where({ ID: id })
-      if (!existing) await INSERT.into(Users).entries({ ID: id, displayName: id })
-    }
 
     this.before(['READ', 'UPDATE'], 'Me', (req) => ensureUser(req))
 

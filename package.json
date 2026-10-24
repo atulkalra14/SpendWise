@@ -10,6 +10,7 @@
     "app/*"
   ],
   "scripts": {
-    "watch-spendwise": "cds watch --open spendwise/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-spendwise": "cds watch --open spendwise/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "test": "node --test test/*.test.js"
   }
 }

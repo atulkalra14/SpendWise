@@ -14,9 +14,28 @@ entity Users : managed {
   passwordHash    : String(255);
 }
 
+// Developer-seeded reference data shared by all users. User-defined categories come later.
+@assert.unique: { code: [code] }
+entity Categories : cuid {
+  code          : String(30) @mandatory;
+  name          : localized String(100) @mandatory;
+  subcategories : Composition of many Subcategories on subcategories.category = $self;
+}
+
+@assert.unique: { codePerCategory: [category, code] }
+entity Subcategories : cuid {
+  code     : String(30) @mandatory;
+  name     : localized String(100) @mandatory;
+  category : Association to Categories @mandatory;
+}
+
 entity Expenses : cuid, managed {
   date        : Date not null;
   amount      : Decimal(15,2) not null;
   currency    : Currency default 'EUR';
   description : String(255);
+  notes       : String(500);
+  category    : Association to Categories;
+  subcategory : Association to Subcategories;
+  user        : Association to Users;
 }

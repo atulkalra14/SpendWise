@@ -5,6 +5,19 @@ service ExpenseService @(path: '/odata/v4/expenses') {
   @restrict: [{ grant: '*', to: 'authenticated-user', where: 'createdBy = $user' }]
   entity Expenses as projection on db.Expenses;
 
+  // user is set by the handler from the authenticated user, never taken from the client.
+  annotate Expenses with {
+    user      @readonly;
+    createdBy @readonly;
+  };
+
+  // Developer-seeded reference data, shared by all users and read-only for now.
+  @readonly @requires: 'authenticated-user'
+  entity Categories as projection on db.Categories;
+
+  @readonly @requires: 'authenticated-user'
+  entity Subcategories as projection on db.Subcategories;
+
   type MonthlySummary {
     month              : String(7);
     currency           : String(3);
