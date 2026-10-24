@@ -1,0 +1,61 @@
+<mvc:View controllerName="spendwise.controller.templates.Register"
+    displayBlock="true"
+    height="100%"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Page id="registerPage" showHeader="false" enableScrolling="true" class="sw-page sw-landing">
+        <VBox class="sw-container sw-register" renderType="Bare">
+            <HBox class="sw-landing-nav" alignItems="Center" justifyContent="SpaceBetween" renderType="Bare">
+                <core:Fragment fragmentName="spendwise.view.fragments.ui.Logo" type="XML"/>
+                <Button class="sw-btn sw-btn-ghost" type="Transparent" text="{i18n>signIn}" press=".onSignIn"/>
+            </HBox>
+
+            <VBox class="sw-card sw-register-card" renderType="Bare">
+                <VBox class="sw-card-header" renderType="Bare">
+                    <Title text="{i18n>registerTitle}" titleStyle="H2" class="sw-title-lg"/>
+                    <Text text="{i18n>registerDescription}" class="sw-caption"/>
+                </VBox>
+
+                <MessageStrip id="registerMessage" class="sw-register-message" showIcon="true" type="Error"
+                    text="{reg>/message}" visible="{= !!${reg>/message} }"/>
+
+                <VBox class="sw-field" renderType="Bare">
+                    <Label text="{i18n>registerDisplayName}" labelFor="displayName" required="true"/>
+                    <Input id="displayName" class="sw-input" value="{reg>/displayName}" maxLength="100"
+                        autocomplete="name" liveChange=".onFieldChange"/>
+                </VBox>
+                <VBox class="sw-field" renderType="Bare">
+                    <Label text="{i18n>registerEmail}" labelFor="email" required="true"/>
+                    <Input id="email" class="sw-input" type="Email" value="{reg>/email}" maxLength="255"
+                        autocomplete="email" liveChange=".onFieldChange"/>
+                </VBox>
+                <VBox class="sw-field" renderType="Bare">
+                    <Label text="{i18n>registerPassword}" labelFor="password" required="true"/>
+                    <Input id="password" class="sw-input" type="Password" value="{reg>/password}" maxLength="128"
+                        autocomplete="new-password" description="{i18n>registerPasswordHint}" liveChange=".onFieldChange"/>
+                </VBox>
+                <VBox class="sw-field" renderType="Bare">
+                    <Label text="{i18n>registerConfirmPassword}" labelFor="confirmPassword" required="true"/>
+                    <Input id="confirmPassword" class="sw-input" type="Password" value="{reg>/confirmPassword}"
+                        maxLength="128" autocomplete="new-password" liveChange=".onFieldChange"/>
+                </VBox>
+
+                <VBox class="sw-field" renderType="Bare">
+                    <HBox alignItems="Center" wrap="Wrap" renderType="Bare">
+                        <CheckBox id="acceptTerms" selected="{reg>/acceptTerms}" text="{i18n>registerAcceptTerms}" select=".onFieldChange"/>
+                        <Link text="{i18n>termsLink}" press=".onOpenTerms" class="sw-register-link"/>
+                        <Link text="{i18n>privacyLink}" press=".onOpenPrivacy" class="sw-register-link"/>
+                    </HBox>
+                </VBox>
+
+                <HBox class="sw-register-actions" justifyContent="End" renderType="Bare">
+                    <Button class="sw-btn sw-btn-outline" type="Transparent" text="{i18n>cancel}"
+                        enabled="{= !${reg>/busy} }" press=".onBackToHome"/>
+                    <Button class="sw-btn sw-btn-primary" type="Transparent" text="{i18n>createAccount}"
+                        enabled="{= !${reg>/busy} }" press=".onSubmit"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </Page>
+</mvc:View>

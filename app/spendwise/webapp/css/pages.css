@@ -406,3 +406,28 @@
     flex: 1 1 0;
     min-width: 0;
 }
+
+/* Registration */
+.sw-register {
+    padding-top: 16px;
+    padding-bottom: 32px;
+    align-items: center;
+}
+
+.sw-register-card {
+    width: 100%;
+    max-width: 480px;
+    padding: 24px;
+}
+
+.sw-register-message {
+    margin-bottom: 16px;
+}
+
+.sw-register-link {
+    margin-left: 8px;
+}
+
+.sw-register-actions {
+    gap: 8px;
+}

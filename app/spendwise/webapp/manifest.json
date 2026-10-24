@@ -23,6 +23,13 @@
           "annotations": [],
           "odataVersion": "4.01"
         }
+      },
+      "registrationService": {
+        "uri": "/odata/v4/registration/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
       }
     }
   },
@@ -69,6 +76,15 @@
         "settings": {
           "operationMode": "Server",
           "autoExpandSelect": true,
+          "earlyRequests": false
+        }
+      },
+      "registration": {
+        "dataSource": "registrationService",
+        "preload": false,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": false,
           "earlyRequests": false
         }
       }
@@ -120,6 +136,13 @@
           ]
         },
         {
+          "name": "register",
+          "pattern": "register",
+          "target": [
+            "register"
+          ]
+        },
+        {
           "name": "profile",
           "pattern": "profile",
           "target": [
@@ -149,6 +172,10 @@
         "overview": {
           "id": "overview",
           "name": "templates.Overview"
+        },
+        "register": {
+          "id": "register",
+          "name": "templates.Register"
         },
         "profile": {
           "id": "profile",

@@ -12,6 +12,7 @@ entity Users : managed {
   locale          : Locale default 'en';
   defaultCurrency : Currency default 'EUR';
   passwordHash    : String(255);
+  termsAcceptedAt : Timestamp;
 }
 
 // Developer-seeded reference data shared by all users. User-defined categories come later.
