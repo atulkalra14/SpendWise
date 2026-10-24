@@ -1,0 +1,59 @@
+<mvc:View controllerName="spendwise.controller.templates.Overview"
+    displayBlock="true"
+    height="100%"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:grid="sap.ui.layout.cssgrid"
+    xmlns="sap.m">
+    <Page id="overviewPage" showHeader="false" enableScrolling="false" class="sw-page">
+        <HBox class="sw-shell" renderType="Bare">
+            <core:Fragment fragmentName="spendwise.view.fragments.layout.Sidebar" type="XML"/>
+
+            <VBox class="sw-main" renderType="Bare">
+                <core:Fragment fragmentName="spendwise.view.fragments.layout.Header" type="XML"/>
+
+                <VBox class="sw-content" renderType="Bare">
+                    <VBox class="sw-content-inner" renderType="Bare">
+
+                        <MessageStrip text="{ui>/error}" type="Error" showIcon="true" visible="{= !!${ui>/error} }"/>
+
+                        <!-- This month, from ExpenseService.monthlySummary -->
+                        <grid:CSSGrid gridTemplateColumns="repeat(auto-fit, minmax(160px, 1fr))" gridGap="16px" busy="{ui>/loading}" items="{kpi>/items}">
+                            <core:Fragment fragmentName="spendwise.view.fragments.ui.StatCard" type="XML"/>
+                        </grid:CSSGrid>
+
+                        <!-- Latest expenses, from ExpenseService.Expenses (only the signed-in user's rows) -->
+                        <VBox class="sw-card sw-profile-panel" renderType="Bare">
+                            <HBox class="sw-card-header" justifyContent="SpaceBetween" alignItems="Center" renderType="Bare">
+                                <VBox renderType="Bare">
+                                    <Title text="{i18n>recentTitle}" titleStyle="H3" class="sw-title"/>
+                                    <Text text="{i18n>recentDescription}" class="sw-caption"/>
+                                </VBox>
+                                <Button class="sw-btn sw-btn-ghost" type="Transparent" text="{i18n>viewAll}" press=".onViewAll"/>
+                            </HBox>
+
+                            <List class="sw-list" showSeparators="None" noDataText="{i18n>noExpenses}"
+                                items="{ path: '/Expenses', sorter: { path: 'date', descending: true }, length: 10 }">
+                                <CustomListItem>
+                                    <HBox class="sw-expense-row" alignItems="Center" renderType="Bare">
+                                        <HBox class="sw-icon-tile" renderType="Bare">
+                                            <core:Icon src="sap-icon://receipt" decorative="true"/>
+                                        </HBox>
+                                        <VBox class="sw-expense-main" renderType="Bare">
+                                            <Text text="{description}" class="sw-body-strong"/>
+                                            <Text text="{path: 'date', type: 'sap.ui.model.odata.type.Date', formatOptions: { style: 'medium' }}" class="sw-caption"/>
+                                        </VBox>
+                                        <Text text="{parts: ['amount', 'currency_code'], formatter: '.formatter.money'}" class="sw-body-strong sw-tabular"/>
+                                    </HBox>
+                                </CustomListItem>
+                            </List>
+                        </VBox>
+
+                    </VBox>
+                </VBox>
+            </VBox>
+        </HBox>
+
+        <core:Fragment fragmentName="spendwise.view.fragments.layout.BottomNav" type="XML"/>
+    </Page>
+</mvc:View>

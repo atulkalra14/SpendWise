@@ -24,6 +24,18 @@ sap.ui.define([
             });
         },
 
+        // Stat cards read from a "kpi" model with { items: [...] }, shared by Profile and Overview.
+        createProfileStatsModel() {
+            return new JSONModel({
+                items: [
+                    { label: "Member since", value: "Mar 2026", hint: "7 months with SpendWise", icon: "sap-icon://calendar", tone: "blue" },
+                    { label: "Transactions", value: "412", hint: "Logged so far", icon: "sap-icon://receipt", tone: "navy" },
+                    { label: "Savings rate", value: "40.6%", hint: "This month", icon: "sap-icon://trend-up", tone: "emerald" },
+                    { label: "Active budgets", value: "4", hint: "1 near its limit", icon: "sap-icon://target-group", tone: "amber" }
+                ]
+            });
+        },
+
         createProfileModel() {
             return new JSONModel({
                 initials: "SJ",
@@ -38,12 +50,6 @@ sap.ui.define([
                 language: "en",
                 dateFormat: "dd.MM.yyyy",
                 weekStart: "monday",
-                stats: [
-                    { label: "Member since", value: "Mar 2026", hint: "7 months with SpendWise", icon: "sap-icon://calendar", tone: "blue" },
-                    { label: "Transactions", value: "412", hint: "Logged so far", icon: "sap-icon://receipt", tone: "navy" },
-                    { label: "Savings rate", value: "40.6%", hint: "This month", icon: "sap-icon://trend-up", tone: "emerald" },
-                    { label: "Active budgets", value: "4", hint: "1 near its limit", icon: "sap-icon://target-group", tone: "amber" }
-                ],
                 securityToggles: [
                     { title: "Two-factor authentication", description: "Ask for a verification code when you sign in on a new device.", enabled: true },
                     { title: "Sign-in alerts", description: "Email me when a new device signs in to my account.", enabled: true }

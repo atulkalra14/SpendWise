@@ -15,6 +15,7 @@
             <Text text="{i18n>navMain}" class="sw-overline sw-sidebar-label"/>
             <Button class="sw-nav-item" type="Transparent" icon="sap-icon://home" text="{i18n>navOverview}" tooltip="{i18n>navOverview}" press=".onNavPress">
                 <customData>
+                    <core:CustomData key="route" value="overview"/>
                     <core:CustomData key="active" value="{= ${ui>/nav} === 'overview' ? 'true' : 'false' }" writeToDom="true"/>
                 </customData>
             </Button>
@@ -52,17 +53,21 @@
                 </customData>
             </Button>
 
-            <!-- User profile area: opens the profile dashboard -->
-            <HBox class="sw-user" alignItems="Center" renderType="Bare" tooltip="{i18n>navProfile}">
-                <customData>
-                    <core:CustomData key="active" value="{= ${ui>/nav} === 'profile' ? 'true' : 'false' }" writeToDom="true"/>
-                </customData>
-                <Avatar initials="{profile>/initials}" displaySize="XS" class="sw-avatar" press=".onOpenProfile"/>
-                <VBox class="sw-user-meta" renderType="Bare">
-                    <Text text="{profile>/name}" class="sw-user-name"/>
-                    <Text text="{profile>/email}" class="sw-user-email"/>
-                </VBox>
-            </HBox>
+            <!-- User profile area: the whole row opens the profile dashboard (keyboard accessible) -->
+            <List class="sw-user-list" showSeparators="None" tooltip="{i18n>navProfile}">
+                <CustomListItem class="sw-user" type="Active" press=".onOpenProfile">
+                    <customData>
+                        <core:CustomData key="active" value="{= ${ui>/nav} === 'profile' ? 'true' : 'false' }" writeToDom="true"/>
+                    </customData>
+                    <HBox class="sw-user-row" alignItems="Center" renderType="Bare">
+                        <Avatar initials="{profile>/initials}" displaySize="XS" class="sw-avatar"/>
+                        <VBox class="sw-user-meta" renderType="Bare">
+                            <Text text="{profile>/name}" class="sw-user-name"/>
+                            <Text text="{profile>/email}" class="sw-user-email"/>
+                        </VBox>
+                    </HBox>
+                </CustomListItem>
+            </List>
 
             <Button class="sw-nav-item sw-nav-danger" type="Transparent" icon="sap-icon://log" text="{i18n>signOut}" tooltip="{i18n>signOut}" press=".onSignOut"/>
         </VBox>

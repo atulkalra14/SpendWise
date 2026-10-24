@@ -34,7 +34,7 @@
                         </HBox>
 
                         <!-- Account stats -->
-                        <grid:CSSGrid gridTemplateColumns="repeat(auto-fit, minmax(160px, 1fr))" gridGap="16px" items="{profile>/stats}">
+                        <grid:CSSGrid gridTemplateColumns="repeat(auto-fit, minmax(160px, 1fr))" gridGap="16px" items="{kpi>/items}">
                             <core:Fragment fragmentName="spendwise.view.fragments.ui.StatCard" type="XML"/>
                         </grid:CSSGrid>
 

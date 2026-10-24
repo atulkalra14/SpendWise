@@ -158,19 +158,31 @@
     color: var(--sw-red);
 }
 
-/* User area */
-.sw-user {
-    gap: var(--sw-space-3);
-    padding: var(--sw-space-2) var(--sw-space-3);
+/* User area: a one-item list so the whole row is pressable */
+.sw-user-list.sapMList,
+.sw-user-list .sapMListUl {
+    background: transparent;
+}
+
+.sapMLIB.sw-user {
     margin-top: var(--sw-space-1);
+    padding: var(--sw-space-2) var(--sw-space-3);
+    border: 0;
     border-radius: var(--sw-radius-md);
+    background: transparent;
     cursor: pointer;
     transition: background-color 0.15s;
 }
 
-.sw-user:hover,
-.sw-user[data-active="true"] {
+.sapMLIB.sw-user:hover,
+.sapMLIB.sw-user:focus,
+.sapMLIB.sw-user[data-active="true"] {
     background: rgba(255, 255, 255, 0.08);
+}
+
+.sw-user-row {
+    gap: var(--sw-space-3);
+    min-width: 0;
 }
 
 .sw-user .sapFAvatar {
@@ -211,7 +223,7 @@
 }
 
 .sw-sidebar[data-collapsed="true"] .sapMBtn.sw-nav-item .sapMBtnInner,
-.sw-sidebar[data-collapsed="true"] .sw-user,
+.sw-sidebar[data-collapsed="true"] .sw-user-row,
 .sw-sidebar[data-collapsed="true"] .sw-sidebar-logo {
     justify-content: center;
 }

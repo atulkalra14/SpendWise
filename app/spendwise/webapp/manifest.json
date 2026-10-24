@@ -113,6 +113,13 @@
           ]
         },
         {
+          "name": "overview",
+          "pattern": "overview",
+          "target": [
+            "overview"
+          ]
+        },
+        {
           "name": "profile",
           "pattern": "profile",
           "target": [
@@ -124,6 +131,10 @@
         "landing": {
           "id": "landing",
           "name": "templates.Landing"
+        },
+        "overview": {
+          "id": "overview",
+          "name": "templates.Overview"
         },
         "profile": {
           "id": "profile",

@@ -5,6 +5,7 @@
     <HBox class="sw-bottomnav" alignItems="Center" renderType="Bare">
         <Button class="sw-bottomnav-item" type="Transparent" icon="sap-icon://home" text="{i18n>navOverview}" press=".onNavPress">
             <customData>
+                <core:CustomData key="route" value="overview"/>
                 <core:CustomData key="active" value="{= ${ui>/nav} === 'overview' ? 'true' : 'false' }" writeToDom="true"/>
             </customData>
         </Button>

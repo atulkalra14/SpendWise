@@ -199,3 +199,37 @@
         display: none;
     }
 }
+
+/* ── Overview ───────────────────────────────────────────────── */
+.sw-list.sapMList,
+.sw-list .sapMListUl {
+    background: transparent;
+}
+
+.sw-list .sapMLIB {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--sw-border);
+    padding: 0;
+}
+
+.sw-list .sapMLIB:last-child {
+    border-bottom: 0;
+}
+
+.sw-list .sapMListNoData {
+    font-family: var(--sw-font-sans);
+    font-size: 0.875rem;
+    color: var(--sw-text-secondary);
+    background: transparent;
+}
+
+.sw-expense-row {
+    gap: var(--sw-space-3);
+    padding: var(--sw-space-3) 0;
+}
+
+.sw-expense-main {
+    flex: 1 1 0;
+    min-width: 0;
+}

@@ -9,7 +9,7 @@ sap.ui.define([
         onInit() {
             this.createUiModel({ nav: "profile", tab: "personal" });
             this.setHeader("profileTitle", "profileSubtitle");
-            this.getView().setModel(mockData.createProfileModel(), "profile");
+            this.getView().setModel(mockData.createProfileStatsModel(), "kpi");
         },
 
         // Design preview only: nothing is persisted yet.

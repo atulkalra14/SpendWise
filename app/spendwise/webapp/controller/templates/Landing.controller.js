@@ -9,13 +9,13 @@ sap.ui.define([
             this.getView().setModel(mockData.createLandingModel(), "landing");
         },
 
-        // Placeholder until authentication exists: both actions open the profile dashboard.
+        // Placeholder until authentication exists: both actions open the app's home page.
         onSignIn() {
-            this.navTo("profile");
+            this.navTo("overview");
         },
 
         onGetStarted() {
-            this.navTo("profile");
+            this.navTo("overview");
         }
     });
 });
