@@ -1,4 +1,5 @@
 const cds = require('@sap/cds')
+const ensureUser = require('./lib/ensure-user')
 
 // Money is summed as integer cents so results never depend on floating point rounding.
 const toCents = (amount) => Math.round(Number(amount) * 100)
@@ -9,7 +10,47 @@ const fromCents = (cents) => {
 
 module.exports = class ExpenseService extends cds.ApplicationService {
   init() {
-    const { Expenses } = this.entities
+    const { Expenses, Categories, Subcategories } = this.entities
+
+    this.before(['CREATE', 'UPDATE'], 'Expenses', async (req) => {
+      await ensureUser(req)
+      req.data.user_ID = req.user.id
+
+      // A PATCH may send only one of the two fields, so check the merged result.
+      let { category_ID, subcategory_ID } = req.data
+      const touched = 'category_ID' in req.data || 'subcategory_ID' in req.data
+      if (!touched) return
+
+      if (req.event === 'UPDATE') {
+        const stored = await this.run(
+          SELECT.one
+            .from(Expenses)
+            .columns('category_ID', 'subcategory_ID')
+            .where({ ID: req.data.ID, createdBy: req.user.id })
+        )
+        if (!stored) return // the restriction answers 404 for rows that are not the caller's
+        if (!('category_ID' in req.data)) category_ID = stored.category_ID
+        if (!('subcategory_ID' in req.data)) subcategory_ID = stored.subcategory_ID
+      }
+
+      if (category_ID) {
+        const category = await this.run(SELECT.one.from(Categories).columns('ID').where({ ID: category_ID }))
+        if (!category) req.error({ status: 400, code: 'CATEGORY_NOT_FOUND', message: 'Category does not exist', target: 'category_ID' })
+      }
+
+      if (subcategory_ID) {
+        const sub = await this.run(
+          SELECT.one.from(Subcategories).columns('category_ID').where({ ID: subcategory_ID })
+        )
+        if (!sub) {
+          req.error({ status: 400, code: 'SUBCATEGORY_NOT_FOUND', message: 'Subcategory does not exist', target: 'subcategory_ID' })
+        } else if (!category_ID) {
+          req.error({ status: 400, code: 'SUBCATEGORY_REQUIRES_CATEGORY', message: 'A subcategory needs a category', target: 'category_ID' })
+        } else if (sub.category_ID !== category_ID) {
+          req.error({ status: 400, code: 'SUBCATEGORY_CATEGORY_MISMATCH', message: 'Subcategory does not belong to the category', target: 'subcategory_ID' })
+        }
+      }
+    })
 
     this.on('monthlySummary', async (req) => {
       const { month } = req.data
