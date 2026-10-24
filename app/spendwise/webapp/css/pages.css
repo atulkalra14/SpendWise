@@ -408,26 +408,34 @@
 }
 
 /* Registration */
-.sw-register {
-    padding-top: 16px;
-    padding-bottom: 32px;
-    align-items: center;
+.sw-register-page,
+.sw-register-page > section {
+    background: var(--sw-bg);
+}
+
+/* The nav keeps the full container width; only the card is narrow and centred. */
+.sw-register-nav {
+    width: 100%;
 }
 
 .sw-register-card {
     width: 100%;
     max-width: 480px;
-    padding: 24px;
+    margin: var(--sw-space-6) auto var(--sw-space-12);
+    padding: var(--sw-space-6);
+    gap: var(--sw-space-4);
 }
 
-.sw-register-message {
-    margin-bottom: 16px;
+.sw-register-card .sw-card-header,
+.sw-register-card .sw-register-message {
+    margin-bottom: 0;
 }
 
 .sw-register-link {
-    margin-left: 8px;
+    margin-left: var(--sw-space-2);
 }
 
 .sw-register-actions {
-    gap: 8px;
+    gap: var(--sw-space-2);
+    margin-top: var(--sw-space-2);
 }

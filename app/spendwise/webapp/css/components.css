@@ -273,6 +273,17 @@ body {
     outline-offset: 0;
 }
 
+/* The border override above hides the UI5 value state, so the error state is restated here. */
+.sw-input.sapMInputBase.sapMInputBaseErrorState .sapMInputBaseContentWrapper {
+    border-color: var(--sw-red);
+    background: var(--sw-red-light);
+}
+
+.sw-input.sapMInputBase.sapMInputBaseErrorState.sapMFocus .sapMInputBaseContentWrapper {
+    border-color: var(--sw-red-dark);
+    outline-color: rgba(239, 68, 68, 0.2);
+}
+
 .sw-switch {
     --sapButton_Track_Selected_Background: var(--sw-emerald);
     --sapButton_Track_Selected_BorderColor: var(--sw-emerald);

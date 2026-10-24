@@ -1,12 +1,14 @@
 sap.ui.define([
     "spendwise/controller/BaseController",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/core/ValueState",
+    "sap/ui/core/library",
     "sap/base/i18n/Localization",
+    "sap/m/MessageBox",
     "sap/m/MessageToast"
-], (BaseController, JSONModel, ValueState, Localization, MessageToast) => {
+], (BaseController, JSONModel, coreLibrary, Localization, MessageBox, MessageToast) => {
     "use strict";
 
+    const { ValueState } = coreLibrary;
     const FIELDS = ["displayName", "email", "password", "confirmPassword", "acceptTerms"];
     const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     const PASSWORD_MIN = 12;
@@ -42,6 +44,43 @@ sap.ui.define([
             if (oControl.setValueState) {
                 oControl.setValueState(ValueState.None);
             }
+        },
+
+        onPasswordChange(oEvent) {
+            this.onFieldChange(oEvent);
+            this._checkPasswordMatch(oEvent.getParameter("value"), this.byId("confirmPassword").getValue());
+        },
+
+        onConfirmChange(oEvent) {
+            this.onFieldChange(oEvent);
+            this._checkPasswordMatch(this.byId("password").getValue(), oEvent.getParameter("value"));
+        },
+
+        // Shown as soon as the confirmation differs, not only on submit. An empty confirmation is
+        // not an error yet, the user may still be typing the password.
+        async _checkPasswordMatch(sPassword, sConfirm) {
+            const oConfirm = this.byId("confirmPassword");
+            if (sConfirm && sConfirm !== sPassword) {
+                oConfirm.setValueState(ValueState.Error);
+                oConfirm.setValueStateText(await this.getText("errPasswordMatch"));
+            } else {
+                oConfirm.setValueState(ValueState.None);
+            }
+        },
+
+        // Clears the form first, then asks whether to leave the page.
+        async onCancel() {
+            this._reset();
+            MessageBox.confirm(await this.getText("cancelConfirmText"), {
+                title: await this.getText("cancelConfirmTitle"),
+                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                emphasizedAction: MessageBox.Action.NO,
+                onClose: (sAction) => {
+                    if (sAction === MessageBox.Action.YES) {
+                        this.onBackToHome();
+                    }
+                }
+            });
         },
 
         // The server is the authority; these checks only save a round trip.
@@ -89,6 +128,7 @@ sap.ui.define([
             const mErrors = await this._validate(oData);
             if (Object.keys(mErrors).length) {
                 this._showFieldErrors(mErrors);
+                oModel.setProperty("/message", await this.getText("errFixFields"));
                 return;
             }
 
@@ -137,7 +177,10 @@ sap.ui.define([
 
             const sRest = this._showFieldErrors(mErrors);
             const bFieldErrors = Object.keys(mErrors).length > 0;
-            const sMessage = sGeneral || sRest || (bFieldErrors ? "" : await this.getText("errGeneric"));
+            let sMessage = sGeneral || sRest;
+            if (!sMessage) {
+                sMessage = await this.getText(bFieldErrors ? "errFixFields" : "errGeneric");
+            }
             this.getView().getModel("reg").setProperty("/message", sMessage);
         },
 

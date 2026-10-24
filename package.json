@@ -11,6 +11,9 @@
   ],
   "scripts": {
     "watch-spendwise": "cds watch --open spendwise/index.html?sap-ui-xx-viewCache=false --livereload false",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "deploy-local": "cds deploy --to sqlite:db.sqlite",
+    "db:users": "sqlite3 -header -column db.sqlite \"select ID, displayName, email, locale, substr(passwordHash,1,7) as hash, termsAcceptedAt from spendwise_Users;\"",
+    "db:update": "node scripts/db-update.js"
   }
 }
