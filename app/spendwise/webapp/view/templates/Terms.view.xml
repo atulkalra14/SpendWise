@@ -1,0 +1,10 @@
+<mvc:View controllerName="spendwise.controller.templates.Terms"
+    displayBlock="true"
+    height="100%"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Page id="termsPage" showHeader="false" enableScrolling="true" class="sw-page sw-landing">
+        <core:Fragment fragmentName="spendwise.view.fragments.layout.LegalDocument" type="XML"/>
+    </Page>
+</mvc:View>

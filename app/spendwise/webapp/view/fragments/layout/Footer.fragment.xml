@@ -1,0 +1,17 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <VBox class="sw-landing-footer" renderType="Bare">
+        <HBox class="sw-container sw-footer-row" justifyContent="SpaceBetween" alignItems="Center" renderType="Bare">
+            <core:Fragment fragmentName="spendwise.view.fragments.ui.Logo" type="XML"/>
+            <HBox class="sw-footer-links" alignItems="Center" renderType="Bare">
+                <Link text="{i18n>termsLink}" press=".onOpenTerms" class="sw-footer-link"/>
+                <Link text="{i18n>privacyLink}" press=".onOpenPrivacy" class="sw-footer-link"/>
+            </HBox>
+            <Text text="{i18n>footerText}" class="sw-caption"/>
+        </HBox>
+        <HBox class="sw-container sw-footer-note" renderType="Bare">
+            <Text text="{i18n>footerDisclaimer}" class="sw-caption"/>
+        </HBox>
+    </VBox>
+</core:FragmentDefinition>

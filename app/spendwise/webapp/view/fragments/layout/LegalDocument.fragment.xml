@@ -1,0 +1,32 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <VBox class="sw-landing-hero" renderType="Bare">
+        <HBox class="sw-container sw-landing-nav" alignItems="Center" justifyContent="SpaceBetween" renderType="Bare">
+            <core:Fragment fragmentName="spendwise.view.fragments.ui.Logo" type="XML"/>
+            <Button class="sw-btn sw-btn-ghost" type="Transparent" icon="sap-icon://nav-back" text="{i18n>backToHome}" press=".onBackToHome"/>
+        </HBox>
+        <VBox class="sw-container sw-legal-head" renderType="Bare">
+            <Text text="{i18n>legalBadge}" class="sw-badge sw-badge-success"/>
+            <Title text="{legal>/title}" titleStyle="H1" wrapping="true" class="sw-display"/>
+            <Text text="{legal>/effective}" class="sw-caption"/>
+            <Text text="{legal>/intro}" class="sw-lead"/>
+        </VBox>
+    </VBox>
+    <VBox class="sw-section" renderType="Bare">
+        <VBox class="sw-container sw-legal" items="{legal>/sections}" renderType="Bare">
+            <HBox class="sw-card sw-legal-section" renderType="Bare">
+                <HBox class="sw-legal-num" renderType="Bare">
+                    <Text text="{legal>number}"/>
+                </HBox>
+                <VBox class="sw-legal-body" renderType="Bare">
+                    <Title text="{legal>heading}" titleStyle="H3" class="sw-title"/>
+                    <VBox items="{legal>paragraphs}" renderType="Bare">
+                        <Text text="{legal>}" class="sw-body"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </VBox>
+    <core:Fragment fragmentName="spendwise.view.fragments.layout.Footer" type="XML"/>
+</core:FragmentDefinition>

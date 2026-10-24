@@ -125,6 +125,20 @@
           "target": [
             "profile"
           ]
+        },
+        {
+          "name": "terms",
+          "pattern": "terms",
+          "target": [
+            "terms"
+          ]
+        },
+        {
+          "name": "privacy",
+          "pattern": "privacy",
+          "target": [
+            "privacy"
+          ]
         }
       ],
       "targets": {
@@ -139,6 +153,14 @@
         "profile": {
           "id": "profile",
           "name": "templates.Profile"
+        },
+        "terms": {
+          "id": "terms",
+          "name": "templates.Terms"
+        },
+        "privacy": {
+          "id": "privacy",
+          "name": "templates.Privacy"
         }
       }
     },

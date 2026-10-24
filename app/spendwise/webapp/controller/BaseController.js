@@ -65,6 +65,20 @@ sap.ui.define([
             this.navTo("profile");
         },
 
+        // Footer links (see fragments/layout/Footer.fragment.xml)
+
+        onOpenTerms() {
+            this.navTo("terms");
+        },
+
+        onOpenPrivacy() {
+            this.navTo("privacy");
+        },
+
+        onBackToHome() {
+            this.navTo("landing");
+        },
+
         onSignOut() {
             this.navTo("landing");
         }

@@ -107,11 +107,6 @@
         </VBox>
 
         <!-- Footer -->
-        <HBox class="sw-landing-footer" renderType="Bare">
-            <HBox class="sw-container" justifyContent="SpaceBetween" alignItems="Center" renderType="Bare">
-                <core:Fragment fragmentName="spendwise.view.fragments.ui.Logo" type="XML"/>
-                <Text text="{i18n>footerText}" class="sw-caption"/>
-            </HBox>
-        </HBox>
+        <core:Fragment fragmentName="spendwise.view.fragments.layout.Footer" type="XML"/>
     </Page>
 </mvc:View>
