@@ -1,0 +1,37 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog id="featureDialog" showHeader="false" contentWidth="560px" stretch="{device>/system/phone}" class="sw-feature-dialog" ariaLabelledBy="featureDialogTitle">
+        <VBox class="sw-feature-detail" renderType="Bare">
+            <HBox class="sw-feature-detail-head" alignItems="Center" renderType="Bare">
+                <HBox class="sw-icon-tile sw-icon-tile-lg" renderType="Bare">
+                    <customData>
+                        <core:CustomData key="tone" value="{feature>/tone}" writeToDom="true"/>
+                    </customData>
+                    <core:Icon src="{feature>/icon}" decorative="true"/>
+                </HBox>
+                <VBox renderType="Bare">
+                    <Title id="featureDialogTitle" text="{feature>/title}" titleStyle="H2" wrapping="true" class="sw-title-lg"/>
+                    <Text text="{feature>/status}" class="sw-badge sw-feature-status" visible="{= !!${feature>/status} }">
+                        <customData>
+                            <core:CustomData key="state" value="{feature>/statusState}" writeToDom="true"/>
+                        </customData>
+                    </Text>
+                </VBox>
+            </HBox>
+            <Text text="{feature>/intro}" class="sw-lead"/>
+            <Title text="{i18n>featureHowItWorks}" titleStyle="H4" class="sw-title"/>
+            <VBox items="{feature>/points}" renderType="Bare" class="sw-feature-points">
+                <HBox class="sw-trust-item" alignItems="Start" renderType="Bare">
+                    <core:Icon src="sap-icon://sys-enter-2" decorative="true"/>
+                    <Text text="{feature>}" class="sw-body"/>
+                </HBox>
+            </VBox>
+            <Text text="{feature>/note}" class="sw-feature-note sw-caption"/>
+            <Text text="{i18n>footerDisclaimer}" class="sw-caption"/>
+            <HBox class="sw-feature-actions" justifyContent="End" renderType="Bare">
+                <Button class="sw-btn sw-btn-primary" type="Transparent" text="{i18n>featureClose}" press=".onFeatureDialogClose"/>
+            </HBox>
+        </VBox>
+    </Dialog>
+</core:FragmentDefinition>

@@ -91,7 +91,7 @@
                     <Title text="{i18n>featuresTitle}" titleStyle="H2" class="sw-title-lg"/>
                     <Text text="{i18n>featuresSubtitle}" class="sw-lead"/>
                 </VBox>
-                <grid:CSSGrid gridTemplateColumns="repeat(auto-fit, minmax(280px, 1fr))" gridGap="16px" items="{landing>/features}">
+                <grid:CSSGrid id="featureGrid" gridTemplateColumns="repeat(auto-fit, minmax(280px, 1fr))" gridGap="16px" items="{landing>/features}">
                     <VBox class="sw-card sw-feature" renderType="Bare">
                         <HBox class="sw-icon-tile sw-icon-tile-lg" renderType="Bare">
                             <customData>
@@ -101,6 +101,10 @@
                         </HBox>
                         <Title text="{landing>title}" titleStyle="H3" class="sw-title"/>
                         <Text text="{landing>text}" class="sw-body"/>
+                        <HBox class="sw-feature-more" alignItems="Center" renderType="Bare">
+                            <Text text="{i18n>featureLearnMore}"/>
+                            <core:Icon src="sap-icon://navigation-right-arrow" decorative="true"/>
+                        </HBox>
                     </VBox>
                 </grid:CSSGrid>
             </VBox>

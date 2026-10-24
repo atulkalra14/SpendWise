@@ -11,6 +11,10 @@ module.exports = class UserService extends cds.ApplicationService {
 
     this.before(['READ', 'UPDATE'], 'Me', (req) => ensureUser(req))
 
+    // Me is draft-enabled so the profile can be edited and saved as a whole. Profiles are created
+    // by ensureUser on first use, never by the client, so starting a draft of a new one is refused.
+    this.before('NEW', 'Me.drafts', (req) => req.reject(405, 'Profiles cannot be created'))
+
     this.before('UPDATE', 'Me', (req) => {
       if (req.data.ID && req.data.ID !== req.user.id) req.reject(400, 'ID cannot be changed')
       if (req.data.defaultCurrency_code && req.data.defaultCurrency_code !== 'EUR') {

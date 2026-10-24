@@ -35,4 +35,4 @@ Planned stack and decisions (see also the project memory):
 
 ## Working style
 
-The user is learning Claude Code and SAP CAP/BTP through this project. Propose each step and explain the CAP concepts involved. Do not create or modify project files without an explicit go-ahead.
+Whereever possible use SAP FIORI tools and annotations to develop everything on frontend

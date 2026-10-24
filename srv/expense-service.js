@@ -12,7 +12,9 @@ module.exports = class ExpenseService extends cds.ApplicationService {
   init() {
     const { Expenses, Categories, Subcategories } = this.entities
 
-    this.before(['CREATE', 'UPDATE'], 'Expenses', async (req) => {
+    // Expenses are draft-enabled, so these checks run on SAVE: when a draft is activated, or on a
+    // direct CREATE/UPDATE. Editing a draft is not validated until the user saves it.
+    this.before('SAVE', 'Expenses', async (req) => {
       await ensureUser(req)
       req.data.user_ID = req.user.id
 
