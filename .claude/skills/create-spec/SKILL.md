@@ -56,8 +56,8 @@ git checkout -b <branch_name>
 ## Step 6 — Research the codebase
 Read these files before writing the spec:
 - `CLAUDE.md` — roadmap, conventions, schema
-- `app.py` — existing routes and structure
-- `database/db.py` — existing schema and functions
+- `app/spendwise` — existing routes and structure
+- `db/schema.cds` — existing schema and functions
 - All files in `.claude/specs/` — avoid duplicating existing specs
 
 Check `CLAUDE.md` to confirm the requested step is not already
@@ -84,7 +84,7 @@ If no new routes: state "No new routes".
 
 ## Database changes
 Any new tables, columns, or constraints needed.
-Always verify against `database/db.py` before writing this.
+Always verify against `db/schema.cds` before writing this.
 If none: state "No database changes".
 
 ## Templates
@@ -126,6 +126,4 @@ Title:     <feature_title>
 
 Then tell the user:
 "Review the spec at `.claude/specs/<step_number>-<feature_slug>.md`
-then enter Plan Mode with Shift+Tab twice to begin implementation."
-
-Do not print the full spec in chat unless explicitly asked.
+and implement the detail plan also consiidering the error handling as per the sap-cap-capire skill guidance. Do not print the full plan in chat unless explicitly asked. Do not write any code."

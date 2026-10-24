@@ -1,0 +1,3 @@
+ID,displayName,email,locale,defaultCurrency_code,passwordHash
+alice,Alice,alice@example.com,en,EUR,scrypt$gmzFio/14RBvNIcRlafn+g==$VUghUH2vyQYWSyG9ftkgj4C26l6fI+bEm6YrayIZqU6k7p6YNIZMKtywkny3jU02GXrR0DZgkE6icFlqwgJO/g==
+bob,Bob,bob@example.com,de,EUR,scrypt$9kxbDSX4t1KL2SqddAhumQ==$jTONNgsASp0fPSgvvVq8dcBirqlBAMSX7KfDE63alfaxItNQnGbdeC+dt9iMURmA/DRSMm0pnrx0vZBS9g2Tzw==
