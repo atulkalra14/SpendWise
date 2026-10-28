@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 SpendWise: a personal finance web app (income, expenses, budgets, recurring payments, product-level price tracking) built on SAP CAP (Node.js) with a SAPUI5/Fiori frontend. Existing so far: the `Expenses` entity and per-user `ExpenseService` (with a `monthlySummary` function), a Fiori app in `app/spendwise` (landing page and Overview page backed by `ExpenseService`), a `Users` entity and `UserService`, and a public `RegistrationService` (`register` action) with a `#/register` page in the Fiori app. Registration is for local/custom login only; on BTP, IAS owns sign-up. Specs live in `docs/specs/` and implementation plans in `docs/plans/`. Anything below marked "planned" is a decision, not existing code.
 
-Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA and UI work: no `xs-security.json` or multitenancy yet; `app/spendwise` has custom CSS, and English-only legal text (`model/legal.js`, waiting for a legal review before it is translated).
+Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA and UI work: no `xs-security.json` or multitenancy yet; `app/spendwise` has approved custom CSS (ADR 0003; one `!important` is left to remove after a visual check) and English-only legal text (`model/legal.js`, waiting for a legal review before it is translated).
 
 ## Project overview
 
@@ -76,7 +76,7 @@ These are constant across all features. Details, values and the reasons are in `
 - Never change a style, lint, theme or UI5-version setting inside a feature. It needs an ADR and its own `chore:` commit that updates every app (see `docs/style-guide.md`, "Changing the standard").
 - `npm run lint` and `npm run format:check` must pass. Disable a lint rule only on one line, with a reason.
 - Run `run_ui5_linter` from `ui5-mcp` after every change to UI5 code.
-- Theme: SAP Horizon (`sap_horizon`) for every app. No custom CSS, inline styles, `!important` or hex colors; layout comes from Fiori elements annotations.
+- Theme: SAP Horizon (`sap_horizon`) for every app. No custom CSS, inline styles, `!important` or hex colors; layout comes from Fiori elements annotations. The only exception is `app/spendwise`, approved in ADR 0003.
 - Every new app is created with the `fiori-mcp` generator from the app baseline in `docs/style-guide.md`, never by copying another app.
 
 ## Tooling

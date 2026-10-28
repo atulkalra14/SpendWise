@@ -98,16 +98,7 @@
     "resources": {
       "css": [
         {
-          "uri": "css/tokens.css"
-        },
-        {
-          "uri": "css/components.css"
-        },
-        {
-          "uri": "css/layout.css"
-        },
-        {
-          "uri": "css/pages.css"
+          "uri": "css/spendwise.css"
         }
       ]
     },

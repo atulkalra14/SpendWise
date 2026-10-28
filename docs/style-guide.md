@@ -84,6 +84,7 @@ Every app starts from the same baseline, so the look is identical.
 
 - No custom CSS, inline styles, `!important` or colors written as hex values in views. Layout and formatting come from Fiori elements and annotations.
 - If custom CSS is unavoidable (a custom control, for example), an ADR approves it and it goes in one shared stylesheet, not in each app. Test custom controls under Horizon. **[verified]**
+- Approved exception: `app/spendwise` is a freestyle app with one custom stylesheet, `webapp/css/spendwise.css`, under the limits of ADR 0003 (hex colours only in the token section, no external fonts, one documented `!important`). No other app has this exception.
 - Every app declares both content densities, `compact` and `cozy`, in `sap.ui5.contentDensities` of `manifest.json`. **[verified]**
 
 **Versions**
