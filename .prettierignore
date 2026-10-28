@@ -6,3 +6,6 @@ package-lock.json
 LICENSES
 app/spendwise/webapp/css
 db.sqlite*
+app/**/eslint.config.mjs
+app/**/ui5.yaml
+.claude/settings.json
