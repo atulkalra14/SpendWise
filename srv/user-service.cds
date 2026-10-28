@@ -1,6 +1,7 @@
 using { spendwise as db } from '../db';
 
-service UserService @(path: '/odata/v4/users') @(requires: 'authenticated-user') {
+// The signed-in user's own profile and password. Only users with the role `User` may call it.
+service UserService @(path: '/odata/v4/users') @(requires: 'User') {
 
   // The signed-in user's own profile. passwordHash is never exposed; ID and the managed
   // fields are read-only, so only the profile fields below can be changed by the client.

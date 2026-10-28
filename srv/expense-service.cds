@@ -1,8 +1,13 @@
 using { spendwise as db } from '../db';
 
+/**
+ * Expenses of the signed-in user, the shared categories, and the monthly summary.
+ * Every endpoint needs the role `User` (a signed-in SpendWise user, see docs/domain-model.md).
+ */
 service ExpenseService @(path: '/odata/v4/expenses') {
 
-  @restrict: [{ grant: '*', to: 'authenticated-user', where: 'createdBy = $user' }]
+  // A user may do everything with their own expenses and nothing with anyone else's.
+  @restrict: [{ grant: '*', to: 'User', where: 'createdBy = $user' }]
   @odata.draft.enabled
   entity Expenses as projection on db.Expenses;
 
@@ -13,10 +18,11 @@ service ExpenseService @(path: '/odata/v4/expenses') {
   };
 
   // Developer-seeded reference data, shared by all users and read-only for now.
-  @odata.draft.enabled @readonly @requires: 'authenticated-user'
+  // Any user with the role may read them (read-only).
+  @odata.draft.enabled @readonly @requires: 'User'
   entity Categories as projection on db.Categories;
 
-  @readonly @requires: 'authenticated-user'
+  @readonly @requires: 'User'
   entity Subcategories as projection on db.Subcategories;
 
   type MonthlySummary {
@@ -29,6 +35,7 @@ service ExpenseService @(path: '/odata/v4/expenses') {
   }
 
   // Totals for one calendar month (YYYY-MM) of the signed-in user's expenses.
-  @requires: 'authenticated-user'
+  // Any user with the role may ask; the handler only ever counts the caller's own expenses.
+  @requires: 'User'
   function monthlySummary(month : String(7)) returns MonthlySummary;
 }

@@ -27,7 +27,7 @@ Basis: capire `cds.log`.
 - Log IDs and counts, never content. No personal data, tokens, secrets or request payloads. Include the tenant ID and the entity ID in `info` logs.
 - Do not set `cds.log.user` to `true` or `sanitize_values` to `false` without an ADR; both have data-privacy impact.
 - Log at the edges (handlers, remote calls, jobs). `srv/lib/` logs only when it makes a decision the caller cannot see.
-- Verify at setup whether the runtime's log format carries a request or correlation ID. If not, an ADR decides how to add one.
+- Request correlation ID: **verified 2026-10-28.** The production log format is JSON and every request log line carries `correlation_id` (also sent as `x_correlation_id`), so no ADR is needed. Quote it when you report a problem.
 
 ## Data conventions
 

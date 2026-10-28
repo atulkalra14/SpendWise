@@ -5,6 +5,18 @@
         "kind": "sqlite",
         "credentials": { "url": "db.sqlite" }
       }
+    },
+    "auth": {
+      "[development]": {
+        "users": {
+          "alice": { "roles": ["User"] },
+          "bob": { "roles": ["User"] },
+          "carol": { "roles": ["User"] },
+          "dave": { "roles": ["User"] },
+          "erin": { "roles": ["User"] },
+          "fred": { "roles": [] }
+        }
+      }
     }
   }
 }

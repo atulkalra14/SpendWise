@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 SpendWise: a personal finance web app (income, expenses, budgets, recurring payments, product-level price tracking) built on SAP CAP (Node.js) with a SAPUI5/Fiori frontend. Existing so far: the `Expenses` entity and per-user `ExpenseService` (with a `monthlySummary` function), a Fiori app in `app/spendwise` (landing page and Overview page backed by `ExpenseService`), a `Users` entity and `UserService`, and a public `RegistrationService` (`register` action) with a `#/register` page in the Fiori app. Registration is for local/custom login only; on BTP, IAS owns sign-up. Specs live in `docs/specs/` and implementation plans in `docs/plans/`. Anything below marked "planned" is a decision, not existing code.
 
-Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA and UI work: no `xs-security.json` or multitenancy yet; `app/spendwise` has approved custom CSS (ADR 0003; one `!important` is left to remove after a visual check) and English-only legal text (`model/legal.js`, waiting for a legal review before it is translated).
+Known deviations from the rules below: no multitenancy yet (a deployment feature, added later; XSUAA roles are in place, see ADR 0004); `app/spendwise` has approved custom CSS (ADR 0003; one `!important` is left to remove after a visual check) and English-only legal text (`model/legal.js`, waiting for a legal review before it is translated).
 
 ## Project overview
 

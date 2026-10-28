@@ -20,6 +20,7 @@
 - Prettier options: single quotes, no semicolons, print width 100, trailing commas `es5` (`.prettierrc`). An override for `app/**/*.js` uses double quotes, semicolons and no trailing commas, because the generated Fiori ESLint config enforces those and must not be hand-edited. `app/**/eslint.config.mjs`, `app/**/ui5.yaml` and `.claude/settings.json` are in `.prettierignore` because they are guarded files.
 - ESLint 9 everywhere, with `@sap/eslint-plugin-cds`, plus `no-unused-vars`, `eqeqeq` and `prefer-const` as errors (`eslint.config.mjs`). `no-console` is off only for `scripts/`, which are terminal tools.
 - Coverage: `node --test` with `--test-coverage-lines=80` over `srv/**/*.js`, see ADR 0001.
+- Two dev dependencies added later so a clean checkout works: `@eslint/js` 9, because `@sap/cds` accepts versions 9 and 10 and npm otherwise picks 10, which needs ESLint 10; and `@sap/cds-dk`, because `cds compile` (CI step, compile hook) needs the CLI and it was only installed globally on one machine.
 
 ## Consequences
 

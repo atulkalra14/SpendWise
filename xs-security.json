@@ -1,0 +1,27 @@
+{
+  "xsappname": "spendwise",
+  "tenant-mode": "dedicated",
+  "description": "Security profile of SpendWise",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.User",
+      "description": "Use SpendWise as a signed-in user"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "User",
+      "description": "A signed-in SpendWise user",
+      "scope-references": ["$XSAPPNAME.User"],
+      "attribute-references": []
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "SpendWise User",
+      "description": "Everyone who may use SpendWise",
+      "role-template-references": ["$XSAPPNAME.User"]
+    }
+  ]
+}
