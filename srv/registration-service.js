@@ -19,8 +19,9 @@ module.exports = class RegistrationService extends cds.ApplicationService {
   init() {
     const { Users } = cds.entities('spendwise')
 
-    // All field errors are collected first (req.error), so the client gets them in one response.
-    // Messages are keys resolved from _i18n/messages*.properties; req.data is never logged.
+    // before register: validate every field (REGISTRATION_DISPLAYNAME_INVALID, _EMAIL_INVALID,
+    // _PASSWORD_LENGTH, _TERMS_REQUIRED). Errors are collected with req.error, so the client gets
+    // them all in one response; req.data is never logged.
     this.before('register', (req) => {
       const { displayName, email, password, acceptTerms } = req.data
 
@@ -50,6 +51,7 @@ module.exports = class RegistrationService extends cds.ApplicationService {
         req.error({ status: 400, message: 'REGISTRATION_TERMS_REQUIRED', target: 'acceptTerms' })
     })
 
+    // on register: create the Users row; a taken email is a generic 409 (REGISTRATION_FAILED)
     this.on('register', async (req) => {
       const displayName = req.data.displayName.trim()
       const ID = normalizeEmail(req.data.email)

@@ -10,7 +10,8 @@ const fs = require('node:fs')
 
 const root = path.join(__dirname, '..', '..')
 const bin = (name) => path.join(root, 'node_modules', '.bin', name)
-const PORT = 4300 + Math.floor(Math.random() * 500)
+// Own port range, so this file never collides with the service tests that run in parallel.
+const PORT = 5300 + Math.floor(Math.random() * 500)
 const BASE = `http://localhost:${PORT}/odata/v4`
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'spendwise-i18n-test-'))
 // The UI5 dev plugin loads a second copy of @sap/cds, which breaks draft handling.
@@ -118,10 +119,16 @@ test('profile rules are keys and translated: no creation, only EUR as default cu
   assert.equal(create.json.error.code, 'USER_PROFILE_CREATE_FORBIDDEN')
   assert.equal(create.json.error.message, 'Profile können nicht angelegt werden.')
 
+  // Given alice's seeded profile in a draft, When USD is set as default currency and the draft
+  // is saved, Then the save is rejected: the rule only runs on SAVE, not while editing.
   const active = 'users/Me(ID=alice,IsActiveEntity=true)'
   const draft = 'users/Me(ID=alice,IsActiveEntity=false)'
-  await call('alice', 'POST', `${active}/UserService.draftEdit`, { PreserveChanges: true })
-  await call('alice', 'PATCH', draft, { defaultCurrency_code: 'USD' })
+  const edit = await call('alice', 'POST', `${active}/UserService.draftEdit`, {
+    PreserveChanges: true,
+  })
+  assert.equal(edit.status, 201)
+  const patch = await call('alice', 'PATCH', draft, { defaultCurrency_code: 'USD' })
+  assert.equal(patch.status, 200)
   const save = await call('alice', 'POST', `${draft}/UserService.draftActivate`, {}, 'de')
   assert.equal(save.status, 400)
   assert.equal(save.json.error.code, 'USER_CURRENCY_UNSUPPORTED')

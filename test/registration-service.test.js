@@ -54,10 +54,18 @@ const rows = (sql) => {
   }
 }
 // One error comes back flat, several come back under details.
-const targets = (res) => {
+const errors = (res) => {
   const err = res.json?.error
-  return (err?.details?.length ? err.details : [err]).map((d) => d.target).sort()
+  return err?.details?.length ? err.details : [err]
 }
+const targets = (res) =>
+  errors(res)
+    .map((d) => d.target)
+    .sort()
+const codes = (res) =>
+  errors(res)
+    .map((d) => d.code)
+    .sort()
 
 before(async () => {
   execFileSync(bin('cds-deploy'), { cwd: root, env, stdio: 'ignore' })
@@ -108,6 +116,7 @@ test('the service exposes only the register action and no password hash', async 
 test('a duplicate email in another case is a generic 409 and creates no second row', async () => {
   const res = await register({ ...valid, email: 'carol@EXAMPLE.com', displayName: 'Other' })
   assert.equal(res.status, 409)
+  assert.equal(res.json.error.code, 'REGISTRATION_FAILED')
   assert.equal(
     rows("select ID from spendwise_Users where lower(ID) = 'carol@example.com'").length,
     1
@@ -129,6 +138,12 @@ test('invalid input returns one error per bad field with its target', async () =
   })
   assert.equal(res.status, 400)
   assert.deepEqual(targets(res), ['acceptTerms', 'displayName', 'email', 'password'])
+  assert.deepEqual(codes(res), [
+    'REGISTRATION_DISPLAYNAME_INVALID',
+    'REGISTRATION_EMAIL_INVALID',
+    'REGISTRATION_PASSWORD_LENGTH',
+    'REGISTRATION_TERMS_REQUIRED',
+  ])
 
   assert.deepEqual(targets(await register({ ...valid, password: 'x'.repeat(129) })), ['password'])
   assert.deepEqual(targets(await register({ ...valid, acceptTerms: undefined })), ['acceptTerms'])
@@ -160,9 +175,10 @@ test('the same password gets a different hash for each user', async () => {
   assert.notEqual(a.passwordHash, b.passwordHash)
 })
 
-test('messages follow Accept-Language', async () => {
+// Translated texts are asserted in test/i18n/messages.test.js; here only the key is checked.
+test('an invalid email is reported with its message key', async () => {
   const res = await register({ ...valid, email: 'bad' }, { 'Accept-Language': 'de' })
-  assert.match(res.json.error.details?.[0]?.message ?? res.json.error.message, /E-Mail/)
+  assert.deepEqual(codes(res), ['REGISTRATION_EMAIL_INVALID'])
 })
 
 test('the plain password never reaches the database or the server log', () => {

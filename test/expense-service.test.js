@@ -239,3 +239,28 @@ test('monthlySummary totals are unchanged for the seeded October data', async ()
   const carol = await call('carol', 'GET', "monthlySummary(month='2026-10')")
   assert.equal(carol.json.total, '0.00')
 })
+
+test('an unknown subcategory is rejected with its message key', async () => {
+  const res = await createExpense(
+    'alice',
+    newExpense({
+      category_ID: GROCERIES,
+      subcategory_ID: 'a0000001-0000-0000-0000-0000000000ff',
+    })
+  )
+  assert.equal(res.status, 400)
+  assert.equal(res.json.error.code, 'EXPENSE_SUBCATEGORY_NOT_FOUND')
+  assert.equal(res.json.error.target, 'subcategory_ID')
+})
+
+test('monthlySummary refuses a month that contains a non-EUR expense', async () => {
+  // Given erin has one USD expense in 2026-09, When she asks for that month, Then it is a 501.
+  const created = await createExpense(
+    'erin',
+    newExpense({ date: '2026-09-05', currency_code: 'USD' })
+  )
+  assert.equal(created.status, 201)
+  const res = await call('erin', 'GET', "monthlySummary(month='2026-09')")
+  assert.equal(res.status, 501)
+  assert.equal(res.json.error.code, 'EXPENSE_CURRENCY_UNSUPPORTED')
+})
