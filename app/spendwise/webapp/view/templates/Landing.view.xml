@@ -58,7 +58,7 @@
                             <Text text="€2,850.00" class="sw-stat-value sw-amount-negative"/>
                         </VBox>
                         <VBox class="sw-preview-kpi" renderType="Bare">
-                            <Text text="{i18n>previewSaved}" class="sw-overline"/>
+                            <Text text="{i18n>previewSavedLabel}" class="sw-overline"/>
                             <Text text="€1,950.00" class="sw-stat-value"/>
                         </VBox>
                     </HBox>

@@ -67,7 +67,9 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "spendwise.i18n.i18n"
+          "bundleName": "spendwise.i18n.i18n",
+          "supportedLocales": ["", "de"],
+          "fallbackLocale": ""
         }
       },
       "": {

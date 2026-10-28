@@ -3,10 +3,11 @@ sap.ui.define(
     "spendwise/controller/BaseController",
     "sap/ui/model/json/JSONModel",
     "sap/base/Log",
+    "sap/base/i18n/Localization",
     "sap/m/MessageToast",
     "spendwise/model/formatter"
   ],
-  (BaseController, JSONModel, Log, MessageToast, formatter) => {
+  (BaseController, JSONModel, Log, Localization, MessageToast, formatter) => {
     "use strict";
 
     return BaseController.extend("spendwise.controller.templates.Overview", {
@@ -23,7 +24,8 @@ sap.ui.define(
         const oKpi = this.getView().getModel("kpi");
         const dNow = new Date();
         const sMonth = dNow.toISOString().slice(0, 7);
-        const sMonthLabel = new Intl.DateTimeFormat("en", {
+        // The month name follows the UI language, so the German subtitle reads "Oktober 2026".
+        const sMonthLabel = new Intl.DateTimeFormat(Localization.getLanguage(), {
           month: "long",
           year: "numeric",
           timeZone: "UTC"

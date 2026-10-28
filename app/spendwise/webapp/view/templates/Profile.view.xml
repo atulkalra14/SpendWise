@@ -75,11 +75,11 @@
                                 <VBox class="sw-field" renderType="Bare">
                                     <Label text="{i18n>country}" labelFor="country"/>
                                     <Select id="country" class="sw-input" selectedKey="{profile>/country}" forceSelection="false">
-                                        <core:Item key="DE" text="Germany"/>
-                                        <core:Item key="AT" text="Austria"/>
-                                        <core:Item key="FR" text="France"/>
-                                        <core:Item key="NL" text="Netherlands"/>
-                                        <core:Item key="ES" text="Spain"/>
+                                        <core:Item key="DE" text="{i18n>countryGermany}"/>
+                                        <core:Item key="AT" text="{i18n>countryAustria}"/>
+                                        <core:Item key="FR" text="{i18n>countryFrance}"/>
+                                        <core:Item key="NL" text="{i18n>countryNetherlands}"/>
+                                        <core:Item key="ES" text="{i18n>countrySpain}"/>
                                     </Select>
                                 </VBox>
                                 <VBox class="sw-field" renderType="Bare">
@@ -107,7 +107,7 @@
                                 <VBox class="sw-field" renderType="Bare">
                                     <Label text="{i18n>currency}" labelFor="currency"/>
                                     <Select id="currency" class="sw-input" selectedKey="{profile>/currency}">
-                                        <core:Item key="EUR" text="Euro (EUR)"/>
+                                        <core:Item key="EUR" text="{i18n>currencyEuro}"/>
                                     </Select>
                                     <Text text="{i18n>currencyHint}" class="sw-caption sw-hint"/>
                                 </VBox>
@@ -129,8 +129,8 @@
                                 <VBox class="sw-field" renderType="Bare">
                                     <Label text="{i18n>weekStart}" labelFor="weekStart"/>
                                     <Select id="weekStart" class="sw-input" selectedKey="{profile>/weekStart}">
-                                        <core:Item key="monday" text="Monday"/>
-                                        <core:Item key="sunday" text="Sunday"/>
+                                        <core:Item key="monday" text="{i18n>weekStartMonday}"/>
+                                        <core:Item key="sunday" text="{i18n>weekStartSunday}"/>
                                     </Select>
                                 </VBox>
                             </grid:CSSGrid>
