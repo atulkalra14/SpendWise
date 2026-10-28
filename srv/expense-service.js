@@ -36,8 +36,16 @@ module.exports = class ExpenseService extends cds.ApplicationService {
       }
 
       if (category_ID) {
-        const category = await this.run(SELECT.one.from(Categories).columns('ID').where({ ID: category_ID }))
-        if (!category) req.error({ status: 400, code: 'CATEGORY_NOT_FOUND', message: 'Category does not exist', target: 'category_ID' })
+        const category = await this.run(
+          SELECT.one.from(Categories).columns('ID').where({ ID: category_ID })
+        )
+        if (!category)
+          req.error({
+            status: 400,
+            code: 'CATEGORY_NOT_FOUND',
+            message: 'Category does not exist',
+            target: 'category_ID',
+          })
       }
 
       if (subcategory_ID) {
@@ -45,11 +53,26 @@ module.exports = class ExpenseService extends cds.ApplicationService {
           SELECT.one.from(Subcategories).columns('category_ID').where({ ID: subcategory_ID })
         )
         if (!sub) {
-          req.error({ status: 400, code: 'SUBCATEGORY_NOT_FOUND', message: 'Subcategory does not exist', target: 'subcategory_ID' })
+          req.error({
+            status: 400,
+            code: 'SUBCATEGORY_NOT_FOUND',
+            message: 'Subcategory does not exist',
+            target: 'subcategory_ID',
+          })
         } else if (!category_ID) {
-          req.error({ status: 400, code: 'SUBCATEGORY_REQUIRES_CATEGORY', message: 'A subcategory needs a category', target: 'category_ID' })
+          req.error({
+            status: 400,
+            code: 'SUBCATEGORY_REQUIRES_CATEGORY',
+            message: 'A subcategory needs a category',
+            target: 'category_ID',
+          })
         } else if (sub.category_ID !== category_ID) {
-          req.error({ status: 400, code: 'SUBCATEGORY_CATEGORY_MISMATCH', message: 'Subcategory does not belong to the category', target: 'subcategory_ID' })
+          req.error({
+            status: 400,
+            code: 'SUBCATEGORY_CATEGORY_MISMATCH',
+            message: 'Subcategory does not belong to the category',
+            target: 'subcategory_ID',
+          })
         }
       }
     })
@@ -62,7 +85,8 @@ module.exports = class ExpenseService extends cds.ApplicationService {
       const year = Number(match[1])
       const mon = Number(match[2])
       const start = `${month}-01`
-      const end = mon === 12 ? `${year + 1}-01-01` : `${year}-${String(mon + 1).padStart(2, '0')}-01`
+      const end =
+        mon === 12 ? `${year + 1}-01-01` : `${year}-${String(mon + 1).padStart(2, '0')}-01`
 
       // The entity restriction already limits rows to the current user; filtering again keeps
       // this handler safe even if the restriction is ever changed.
@@ -91,7 +115,7 @@ module.exports = class ExpenseService extends cds.ApplicationService {
         total: fromCents(total),
         count: rows.length,
         largestAmount: fromCents(largest ? largest.cents : 0),
-        largestDescription: largest?.description || ''
+        largestDescription: largest?.description || '',
       }
     })
 

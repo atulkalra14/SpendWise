@@ -12,7 +12,12 @@ const PORT = 4800 + Math.floor(Math.random() * 500)
 const SERVICE = `http://localhost:${PORT}/odata/v4`
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'spendwise-reg-test-'))
 const dbFile = path.join(dir, 'test.db')
-const env = { ...process.env, CDS_PLUGIN_UI5_ACTIVE: 'false', CDS_REQUIRES_DB_KIND: 'sqlite', CDS_REQUIRES_DB_CREDENTIALS_URL: dbFile }
+const env = {
+  ...process.env,
+  CDS_PLUGIN_UI5_ACTIVE: 'false',
+  CDS_REQUIRES_DB_KIND: 'sqlite',
+  CDS_REQUIRES_DB_CREDENTIALS_URL: dbFile,
+}
 let server
 let output = ''
 
@@ -20,20 +25,33 @@ const call = async (method, url, body, headers = {}) => {
   const res = await fetch(`${SERVICE}/${url}`, {
     method,
     headers: { ...(body ? { 'Content-Type': 'application/json' } : {}), ...headers },
-    body: body ? JSON.stringify(body) : undefined
+    body: body ? JSON.stringify(body) : undefined,
   })
   const text = await res.text()
   let json
-  try { json = JSON.parse(text) } catch { json = undefined }
+  try {
+    json = JSON.parse(text)
+  } catch {
+    json = undefined
+  }
   return { status: res.status, json, text }
 }
 const register = (body, headers) => call('POST', 'registration/register', body, headers)
 
-const valid = { displayName: 'Carol', email: 'Carol@Example.com', password: 'correct horse battery', acceptTerms: true }
+const valid = {
+  displayName: 'Carol',
+  email: 'Carol@Example.com',
+  password: 'correct horse battery',
+  acceptTerms: true,
+}
 const rows = (sql) => {
   const { DatabaseSync } = require('node:sqlite')
   const db = new DatabaseSync(dbFile, { readOnly: true })
-  try { return db.prepare(sql).all() } finally { db.close() }
+  try {
+    return db.prepare(sql).all()
+  } finally {
+    db.close()
+  }
 }
 // One error comes back flat, several come back under details.
 const targets = (res) => {
@@ -44,10 +62,19 @@ const targets = (res) => {
 before(async () => {
   execFileSync(bin('cds-deploy'), { cwd: root, env, stdio: 'ignore' })
   server = spawn(bin('cds-serve'), ['--port', String(PORT)], { cwd: root, env })
-  server.stdout.on('data', (d) => { output += d })
-  server.stderr.on('data', (d) => { output += d })
+  server.stdout.on('data', (d) => {
+    output += d
+  })
+  server.stderr.on('data', (d) => {
+    output += d
+  })
   for (let i = 0; i < 60; i++) {
-    try { await fetch(`${SERVICE}/registration/$metadata`); return } catch { await new Promise((r) => setTimeout(r, 500)) }
+    try {
+      await fetch(`${SERVICE}/registration/$metadata`)
+      return
+    } catch {
+      await new Promise((r) => setTimeout(r, 500))
+    }
   }
   throw new Error('server did not start')
 })
@@ -81,7 +108,10 @@ test('the service exposes only the register action and no password hash', async 
 test('a duplicate email in another case is a generic 409 and creates no second row', async () => {
   const res = await register({ ...valid, email: 'carol@EXAMPLE.com', displayName: 'Other' })
   assert.equal(res.status, 409)
-  assert.equal(rows("select ID from spendwise_Users where lower(ID) = 'carol@example.com'").length, 1)
+  assert.equal(
+    rows("select ID from spendwise_Users where lower(ID) = 'carol@example.com'").length,
+    1
+  )
 })
 
 test('two parallel registrations of one email give one success and one 409', async () => {
@@ -91,13 +121,21 @@ test('two parallel registrations of one email give one success and one 409', asy
 })
 
 test('invalid input returns one error per bad field with its target', async () => {
-  const res = await register({ displayName: '  ', email: 'nope', password: 'short', acceptTerms: false })
+  const res = await register({
+    displayName: '  ',
+    email: 'nope',
+    password: 'short',
+    acceptTerms: false,
+  })
   assert.equal(res.status, 400)
   assert.deepEqual(targets(res), ['acceptTerms', 'displayName', 'email', 'password'])
 
   assert.deepEqual(targets(await register({ ...valid, password: 'x'.repeat(129) })), ['password'])
   assert.deepEqual(targets(await register({ ...valid, acceptTerms: undefined })), ['acceptTerms'])
-  assert.equal((await register({ ...valid, email: 'a@b.co', displayName: 'x'.repeat(101) })).status, 400)
+  assert.equal(
+    (await register({ ...valid, email: 'a@b.co', displayName: 'x'.repeat(101) })).status,
+    400
+  )
 })
 
 test('client-supplied key, hash and audit fields are rejected, an unknown locale is ignored', async () => {
@@ -116,7 +154,9 @@ test('client-supplied key, hash and audit fields are rejected, an unknown locale
 test('the same password gets a different hash for each user', async () => {
   await register({ ...valid, email: 'f1@example.com' })
   await register({ ...valid, email: 'f2@example.com' })
-  const [a, b] = rows("select passwordHash from spendwise_Users where ID in ('f1@example.com','f2@example.com')")
+  const [a, b] = rows(
+    "select passwordHash from spendwise_Users where ID in ('f1@example.com','f2@example.com')"
+  )
   assert.notEqual(a.passwordHash, b.passwordHash)
 })
 

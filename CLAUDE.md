@@ -9,6 +9,7 @@ SpendWise: a personal finance web app (income, expenses, budgets, recurring paym
 Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA and UI work: no `xs-security.json` or multitenancy yet; `format:check` and `i18n:check` fail until the one-time reformat and the i18n fixes; the model is one file `db/schema.cds` and services have no `srv/handlers/` split; `app/spendwise` has custom CSS; the expense and user services still use literal messages.
 
 ## Project overview
+
 - SAP Cloud Application Programming Model (CAP), Node.js runtime.
 - Local DB: SQLite (in-memory). Cloud DB: SAP HANA Cloud (HDI).
 - Tenancy: multitenant SaaS (`@sap/cds-mtxs`, one HDI container per tenant).
@@ -16,13 +17,15 @@ Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA 
 - UI: SAP Fiori elements (annotation-driven)
 
 ## Versions and bootstrap
+
 - Capire currently targets Node.js >= 24, `@sap/cds` 10, `@sap/cds-mtxs` 4. Pin the versions in `package.json` and `engines`; check with `cds version`.
 - A new project starts with `cds init --nodejs`, then `git init`, then `cds add multitenancy,xsuaa` as needed, then the test setup (`node --test` with `cds.test`; CAP does not add a runner) and the style tooling from `docs/style-guide.md` (Prettier, ESLint). `npm test`, `npm run lint`, `npm run format:check` and the git-based review commands only work after this.
 
 ## Folder layout
-- `db/`   – CDS domain model in `db/schema/`, seed data (`db/data/*.csv`), no logic
-- `srv/`  – services (`*.cds`), handlers (`srv/handlers/`), business logic in `srv/lib/`, remote services in `srv/external/`, shared helpers in `srv/common/`
-- `app/`  – Fiori apps and UI annotations (`app/<app>/fiori-service.cds`, imported by `app/services.cds`)
+
+- `db/` – CDS domain model in `db/schema/`, seed data (`db/data/*.csv`), no logic
+- `srv/` – services (`*.cds`), handlers (`srv/handlers/`), business logic in `srv/lib/`, remote services in `srv/external/`, shared helpers in `srv/common/`
+- `app/` – Fiori apps and UI annotations (`app/<app>/fiori-service.cds`, imported by `app/services.cds`)
 - `test/` – `unit/`, `service/`, `auth/`, `tenant/`, `i18n/`, `integration/` tests and `data/` fixtures (see "Testing")
 - `docs/` – reference docs (see "Reference docs"), `adr/` (decisions), `specs/` and `plans/` (one file per feature, written by `/new-slice`)
 - `_i18n/` – translatable texts: `i18n*.properties` (model/annotation labels), `messages*.properties` (runtime messages)
@@ -32,36 +35,43 @@ Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA 
 - Root config files, one source each: `.editorconfig`, `.prettierrc`, `eslint.config.mjs`, `package.json`, `xs-security.json` (see "Code style, linting and theme")
 - `.claude/` – settings, subagents, hooks, commands (`/new-slice`, `/review`). Do not modify without asking.
 - `.mcp.json` – MCP servers: `cds-mcp` (CAP model and docs), `fiori-mcp`, `ui5-mcp`
-- `gen/`  – generated output. NEVER edit.
+- `gen/` – generated output. NEVER edit.
 
 ## Reference docs
+
 This file holds the rules that apply to every task. The detail lives in `docs/`. Before starting a task, read the docs that apply to it. Subagents do the same.
 
-| Read | Before |
-|---|---|
-| `docs/domain-model.md`, `docs/adr/` | every feature |
-| `docs/code-organisation.md` | writing a spec or creating any file |
-| `docs/conventions.md` | writing models, handlers or tests (errors, logging, IDs, drafts) |
-| `docs/code-comments.md` | writing or changing any code |
-| `docs/style-guide.md` | any UI, style, lint or theme work |
-| `docs/i18n.md` | adding or changing any text |
-| `docs/agentic-readiness.md` | adding or changing an action or service |
+| Read                                | Before                                                           |
+| ----------------------------------- | ---------------------------------------------------------------- |
+| `docs/domain-model.md`, `docs/adr/` | every feature                                                    |
+| `docs/code-organisation.md`         | writing a spec or creating any file                              |
+| `docs/conventions.md`               | writing models, handlers or tests (errors, logging, IDs, drafts) |
+| `docs/code-comments.md`             | writing or changing any code                                     |
+| `docs/style-guide.md`               | any UI, style, lint or theme work                                |
+| `docs/i18n.md`                      | adding or changing any text                                      |
+| `docs/agentic-readiness.md`         | adding or changing an action or service                          |
 
 ## Code organisation
+
 Claude decides where code goes and never asks the user. Order of precedence: the structure already in the repo, then `docs/code-organisation.md`, then capire via `cds-mcp`. `/new-slice` records each decision in the spec and the plan.
+
 - One CDS file per bounded context in `db/schema/<context>.cds`; `db/index.cds` imports them.
 - One service per use case and user group, as a facade over `db/` (`srv/<context>-service.cds` and `.js`). Handlers in `srv/handlers/`, logic in `srv/lib/`, helpers in `srv/common/`, remote services in `srv/external/`.
 - UI annotations only in `app/<app>/fiori-service.cds`, imported by `app/services.cds`.
 - Dependencies point one way: `app/` → `srv/` → `db/`.
 
 ## Code comments
+
 Goal: a developer new to the project can read any file and understand each section and why it exists. Comments are English and explain why, not what.
+
 - Every file has a header comment and section comments. CDS entities, services, actions and functions have doc comments. Every function in `srv/lib/` and `srv/common/` has JSDoc. Every handler has a one-line comment with phase, event and rule.
 - No commented-out code, no `TODO` without a reason and owner, no secrets. Change the comment with the code.
 - Full rules: `docs/code-comments.md`.
 
 ## Code style, linting and theme
+
 These are constant across all features. Details, values and the reasons are in `docs/style-guide.md`; this section holds the rules.
+
 - One source per setting: `.editorconfig`, the Prettier config, the ESLint configs, and each app's `ui5.yaml` for the SAPUI5 version and theme. No second copy and no per-feature override.
 - Never change a style, lint, theme or UI5-version setting inside a feature. It needs an ADR and its own `chore:` commit that updates every app (see `docs/style-guide.md`, "Changing the standard").
 - `npm run lint` and `npm run format:check` must pass. Disable a lint rule only on one line, with a reason.
@@ -70,7 +80,9 @@ These are constant across all features. Details, values and the reasons are in `
 - Every new app is created with the `fiori-mcp` generator from the app baseline in `docs/style-guide.md`, never by copying another app.
 
 ## Tooling
+
 Use the tools in this order when sources disagree: (1) our rules, in this file and the `docs/` it lists, (2) the MCP servers, (3) the skills, (4) general knowledge, which is never enough for CDS, Fiori or UI5 APIs.
+
 - **This file and `docs/`** hold our decisions only. Do not copy SAP documentation into them; point to the tool instead.
 - **MCP servers**, pinned in `.mcp.json`, answer facts: `cds-mcp` (`search_model` for this project's model, `search_docs` for capire), `fiori-mcp` (generate and change Fiori apps, Fiori docs), `ui5-mcp` (UI5 guidelines, API reference, linter, manifest validation).
 - **Skills** in `.claude/skills/` give procedures: `cap-developer` (CAP idioms), `cap-add-remote-service` (consume an external service), `cap-upgrade` (CDS upgrade).
@@ -79,6 +91,7 @@ Use the tools in this order when sources disagree: (1) our rules, in this file a
 - Version bumps of the MCP servers are deliberate: read the release notes, change the pin in `.mcp.json`, and check the tools still exist.
 
 ## Commands
+
 - Install: `npm ci`
 - Run locally: `npx cds watch`
 - Compile check: `npx cds compile srv --to json > /dev/null`
@@ -90,6 +103,7 @@ Use the tools in this order when sources disagree: (1) our rules, in this file a
 - Add tenant locally: `npx cds subscribe <tenant> --to http://localhost:4005` (sidecar port; remove with `cds unsubscribe <tenant> --from http://localhost:4005`)
 
 ## Definition of done
+
 1. `cds compile` passes with no warnings introduced.
 2. Tests pass, including auth tests for every role (positive and negative).
 3. Lint and `npm run format:check` are clean, with no new lint suppressions without a reason.
@@ -100,6 +114,7 @@ Use the tools in this order when sources disagree: (1) our rules, in this file a
 8. Style and theme follow "Code style, linting and theme": no custom CSS or theme settings, and no change to a config file.
 
 ## Rules
+
 - CDS model is the source of truth. Propose model changes first, wait for review, then implement handlers.
 - Never invent CDS annotations, functions or `cds` APIs. If unsure, query the `cds-mcp` server first (`search_model` for this project's own entities and services, `search_docs` for CAP documentation), then https://cap.cloud.sap/docs, and say what you verified.
 - Fiori and UI5 work: use the `fiori-mcp` and `ui5-mcp` tools instead of writing `manifest.json` or annotation boilerplate from memory. Review generated output like any other change.
@@ -114,7 +129,9 @@ Use the tools in this order when sources disagree: (1) our rules, in this file a
 - Keep changes small: one feature slice per task (entity, service, handler, test, annotation).
 
 ## Errors, logging, IDs and drafts
+
 Full rules, with the capire basis and our conventions, are in `docs/conventions.md`. Read it before writing models, handlers or tests.
+
 - Validate with annotations first (`@mandatory`, `@assert.*`, `@readonly`). A handler only for rules annotations cannot express.
 - Report errors with `req.reject` / `req.error` and a message key from `_i18n/messages*.properties`. Never `throw new Error`, never a literal sentence, never internal detail (stack trace, SQL, host name) in a message. `401` and `403` come from authorization, not from handlers.
 - Log with `const LOG = cds.log('<context>')`, never `console.log`. Log IDs, not content; never personal data, tokens or payloads.
@@ -123,13 +140,16 @@ Full rules, with the capire basis and our conventions, are in `docs/conventions.
 - Message placeholder syntax and log correlation IDs are verified at project setup (see `docs/conventions.md`).
 
 ## Agent readiness
+
 We design for AI agents (SAP Joule) now and build agentic features later. Nothing agentic is installed today. Rules and the adoption path are in `docs/agentic-readiness.md`.
+
 - Name actions after business intent and describe them in English doc comments; an agent picks tools by name and description.
 - Authorization is never relaxed for agents; risky actions need a human confirm step; actions are safe to repeat.
 - Never put `@mcp` on a service that re-exposes SAP application APIs (SAP API Policy).
 - Adding the first agent feature (`@cap-js/mcp`, Joule) needs an ADR first.
 
 ## Testing
+
 - Use `cds.test(...)` with the project root; use mocked users (`alice`, `bob`, ...) defined in `[development]` config.
 - Layout under `test/`: `unit/` (logic from `srv/lib/`, no CAP), `service/` (OData requests), `auth/` (role matrix), `tenant/` (isolation), `i18n/`, `integration/` (remote mocks, outbox), `data/` (fixtures).
 - Required per service: happy path, validation failure, authorization denied, authorization instance filter.
@@ -140,16 +160,19 @@ We design for AI agents (SAP Joule) now and build agentic features later. Nothin
 - Run critical flows against HANA before release; SQLite hides dialect and locking differences.
 
 ## Pull requests
+
 - One pull request per slice, from `feature/<feature_slug>`. The title is a conventional commit message. Squash merge, so the title becomes the commit. [convention]
 - The description follows `.github/pull_request_template.md`: summary, links to the spec and plan, results of every check, schema and authorization changes, German texts that need native review, screenshots for UI changes, risks and ADR links.
 - A pull request is ready when every item in "Definition of done" holds, the `reviewer` output has no Blocking finding, and one human has approved it.
 
 ## Security
+
 - Every service must have `@requires` or `@restrict`; no open `@public` without explicit approval.
 - Do not log personal data or tokens.
 - Do not read or edit `.env`, `default-env.json`, `*.key`, or `default-services.json`.
 
 ## Multitenancy (XSUAA)
+
 - Use `@sap/cds-mtxs` (sidecar architecture); add via `cds add multitenancy`. Never hand-roll tenant handling.
 - Each tenant has its own HDI container. Always use `cds.context.tenant`/`req.tenant`; never store tenant data in module-level variables or shared caches without tenant key.
 - `xs-security.json` holds scopes and role templates. Do not change scope names after release without a migration plan.
@@ -160,7 +183,9 @@ We design for AI agents (SAP Joule) now and build agentic features later. Nothin
 - Test with at least two tenants, including a cross-tenant isolation test (tenant A must never read tenant B data).
 
 ## Internationalization (i18n)
+
 Languages, tone, glossary, the translation process and how to add a language are in `docs/i18n.md`.
+
 - Supported languages: `en` (default and fallback) and `de`. Design so that a new language needs only new files, no code change.
 - Never hard-code user-facing text in handlers, CDS, annotations or UI code. Use keys: `{i18n>Key}` in CDS and annotations, message keys in `req.reject`.
 - Texts live in `_i18n/i18n*.properties` (labels), `_i18n/messages*.properties` (runtime messages) and `app/<app>/webapp/i18n/` (UI5). Translatable business data uses `localized` elements, with seed translations in `db/data/<Entity>_texts.csv`.
@@ -169,9 +194,11 @@ Languages, tone, glossary, the translation process and how to add a language are
 - Tenant-specific text overrides need an ADR before implementation.
 
 ## Workflow for each feature
+
 This list is the single definition of the workflow. `/new-slice <feature>` runs it step by step, and `/review` runs the checks before a pull request. If another file describes the workflow differently, this list wins.
 
 Steps marked **GATE** stop until the user approves. Nothing after a gate starts before that.
+
 1. Understand the feature; read `docs/domain-model.md`, `docs/adr/` and the reference docs that apply (see "Reference docs").
 2. Check that the working tree is clean, then create `feature/<feature_slug>` from an up-to-date `main`.
 3. Write the spec and save it as `docs/specs/<step_number>-<feature_slug>.md`.
@@ -187,7 +214,7 @@ Steps marked **GATE** stop until the user approves. Nothing after a gate starts 
 13. Commit with a clear message, only when the user approves.
 
 ## Git
+
 - Branch per feature: `feature/<feature_slug>`.
 - Conventional commits (`feat:`, `fix:`, `test:`, `docs:`, `chore:`).
 - Do not commit `gen/`, `node_modules/`, `.env`.
-

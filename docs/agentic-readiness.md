@@ -5,7 +5,9 @@ Goal: design every service so that AI agents, for example SAP Joule, can use it 
 Status markers: **[verified]** = checked against capire; **[verify at adoption]** = not yet confirmed, check when the first agent feature is planned; **[convention]** = our own choice.
 
 ## What CAP offers [verified]
+
 Source: capire "Native AI" guides.
+
 - The `@cap-js/mcp` plugin exposes a CAP service through the Model Context Protocol (MCP). Annotating a service with `@mcp` creates one MCP server for it, with three generic tools: `describe` (service metadata), `query` (read an entity) and `call` (run an action).
 - To CAP, MCP is just another protocol next to OData and REST. The existing service definitions are reused; nothing is duplicated.
 - The tools are meant for AI agents and are not a stable API. The stable API stays OData (or REST).
@@ -14,6 +16,7 @@ Source: capire "Native AI" guides.
 - `@cap-js/mcp` is a runtime plugin of the application. It is not the `@cap-js/mcp-server` that we use in `.mcp.json` for development help; do not confuse the two.
 
 ## Rules that apply now
+
 These cost almost nothing and make the later step small.
 
 1. **Name actions after business intent.** `approveOrder`, `cancelBooking`, not `updateStatus`. An agent chooses a tool by its name and description, so the name must say what happens in business terms.
@@ -28,7 +31,9 @@ These cost almost nothing and make the later step small.
 10. **SAP API Policy.** `@mcp` is only for our own custom application services. Never annotate a service that proxies or re-exposes SAP application APIs (for example an S/4HANA consumption view in `srv/external/`), because the SAP API Policy does not allow that route. **[verified]** Read the policy section in the capire guide before any exception.
 
 ## Adoption path (later, not now)
+
 Each step needs the previous one, and the first needs an ADR.
+
 1. **ADR**: which use cases, which identity the agent uses, which services are exposed, what a human must confirm, and what it would add or duplicate (`Tooling` in `CLAUDE.md`).
 2. **Pilot**: add the `@cap-js/mcp` plugin and annotate one narrow, read-only agent service with `@mcp`. Test `describe`, `query` and `call` with the auth matrix and a tenant-isolation test.
 3. **Write actions**: add actions behind the confirm step (rule 5), with tests for authorization, idempotency and message keys.
@@ -36,12 +41,14 @@ Each step needs the previous one, and the first needs an ADR.
 5. **Custom agents**: only if the generic agent is not enough, build a CAP-level agent that other agents call through A2A. SAP's reference architecture describes low-code agents in Joule Studio and pro-code agents using the SAP Cloud SDK for AI. **[verify at adoption]**
 
 ## Tests to add when an agent service exists
+
 - Auth matrix on the agent service: each role x each tool, including denied cases.
 - Cross-tenant isolation through the MCP tools.
 - Confirm step cannot be skipped; repeated calls are safe.
 - Message keys and `target` for every validation failure.
 
 ## Sources
+
 - capire: Native AI, MCP Adapter, XTravels sample, Integration to Joule (https://cap.cloud.sap/docs/guides/ai/)
 - SAP News: new agentic capabilities in SAP BTP (https://news.sap.com/2025/11/new-agentic-capabilities-sap-btp-supercharge-developers/)
 - SAP Architecture Center: Integrating AI Agents with Joule (https://architecture.learning.sap.com/docs/ref-arch/ae6821)

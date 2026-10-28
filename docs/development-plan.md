@@ -98,6 +98,7 @@ project-root/
 ```
 
 Rules for this layout:
+
 - One CDS file per bounded context; split when a file passes ~300 lines.
 - Handlers stay thin; logic lives in `srv/lib/` and is tested without CAP.
 - UI annotations live in `app/`, never in `srv/`.
@@ -108,6 +109,7 @@ Rules for this layout:
 ---
 
 ## Phase 0 – Discovery (1-2 weeks)
+
 - [ ] Personas, roles, and key user journeys documented
 - [ ] Bounded contexts and glossary in `docs/domain-model.md`
 - [ ] Integration inventory (systems, protocols, owners, auth)
@@ -118,6 +120,7 @@ Rules for this layout:
 - [ ] Risks and open questions list
 
 ## Phase 1 – Foundation (1 week)
+
 - [ ] `cds init --nodejs`, `git init`, folder structure above created
 - [ ] `cds add multitenancy,xsuaa` as the target stack requires; decide sidecar vs embedded MTX deliberately (the standard assumes the sidecar)
 - [ ] `package.json`: `node --test` with `cds.test` configured (CAP does not add a runner), scripts `test`, `lint`, `format`, `format:check`, `i18n:check`, pinned `@sap/cds` / `@sap/cds-mtxs` versions and `engines`
@@ -136,6 +139,7 @@ Rules for this layout:
 - [ ] Confirm the rules in `docs/conventions.md` (error handling, logging, IDs, drafts) and `CLAUDE.md` (pull requests). Write an ADR only for a deviation. Verify the message placeholder syntax (`{0}` or named) in `en` and `de`, verify whether the log format carries a request or correlation ID, and set the 80% coverage threshold with `--test-coverage-lines` in the `test` script
 
 ## Phase 2 – Domain model (`db/`)
+
 - [ ] Common aspects and types (`cuid`, `managed`, code lists)
 - [ ] Entities per bounded context, associations vs compositions justified
 - [ ] `localized` elements for translatable business data (code lists, statuses); `*_texts.csv` seed data
@@ -147,6 +151,7 @@ Rules for this layout:
 - [ ] Migration plan for any destructive schema change
 
 ## Phase 3 – Service layer (`srv/`)
+
 - [ ] One service per use case and user group (UI, API, admin, integration)
 - [ ] Projections expose only what is needed
 - [ ] Actions/functions with typed parameters
@@ -158,6 +163,7 @@ Rules for this layout:
 - [ ] Logging via `cds.log` as in `docs/conventions.md`: IDs not content, no personal data, correlation ID if the runtime provides one (see Phase 1)
 
 ## Phase 4 – Authentication and authorization
+
 - [ ] `xs-security.json`: scopes and role templates
 - [ ] `@requires` on every service, `@restrict` per entity/action
 - [ ] Instance-based rules (`where` conditions) for row-level access
@@ -166,6 +172,7 @@ Rules for this layout:
 - [ ] Security review by the security-reviewer subagent and a human
 
 ## Phase 5 – Integration
+
 - [ ] `cds import` for each remote API, local mocks
 - [ ] Destinations per subaccount, none hard-coded
 - [ ] Outbox for reliable events and remote calls
@@ -174,6 +181,7 @@ Rules for this layout:
 - [ ] Contract tests against mocks
 
 ## Phase 6 – UI
+
 - [ ] Fiori elements list report and object page via annotations
 - [ ] Value helps, field groups, actions, filters
 - [ ] Draft UX, error display, messages
@@ -186,6 +194,7 @@ Rules for this layout:
 - [ ] Human UX review per app
 
 ## Phase 7 – Quality
+
 - [ ] Unit tests for business logic; the 80% coverage threshold in the `test` script is met
 - [ ] Service tests for all OData endpoints
 - [ ] Auth matrix tests complete
@@ -197,7 +206,9 @@ Rules for this layout:
 - [ ] German texts reviewed by a native speaker; no key left without `en` and `de` text
 
 ## Phase 8 – Agentic features (optional, later)
+
 Not started until the product needs it. Follow the adoption path in `docs/agentic-readiness.md`.
+
 - [ ] ADR: use cases, agent identity, exposed services, confirm steps, what it adds and duplicates
 - [ ] Pilot: `@cap-js/mcp` plugin and `@mcp` on one narrow, read-only agent service; `describe`, `query` and `call` tested
 - [ ] Auth matrix and tenant isolation tests through the MCP tools
@@ -208,7 +219,9 @@ Not started until the product needs it. Follow the adoption path in `docs/agenti
 ---
 
 ## Per-slice loop (repeat for every feature)
+
 Defined once, in the "Workflow for each feature" list in `CLAUDE.md`; `/new-slice` runs it. Keep changes small, with one branch and one PR per slice. Do not copy the steps here, so the two cannot drift apart.
 
 ## Always review by hand
+
 - Authorization, draft logic, migrations, `xs-security.json`, anything using privileged contexts or direct DB access.

@@ -1,22 +1,27 @@
 # Spec: Update Expenses Schema
 
 ## Overview
+
 Extend the `Expenses` entity so each expense can be classified. Today an expense has only `date`, `amount`, `currency` and `description`, which is not enough for budgets, analytics or the dashboard breakdowns planned for the MVP. This step adds developer-seeded `Categories` and `Subcategories` (CLAUDE.md: user-defined ones come later), links each expense to them, and adds an optional `notes` field and a link to the owning `Users` record. It also exposes the new data through `ExpenseService`. It is the data foundation for budgets (per category), the calendar/analytics views and, later, product-level price tracking.
 
 The step does not specify which fields to add, so the scope below is inferred from CLAUDE.md and the project vision. Confirm or trim it during review.
 
 ## Depends on
+
 - Step 01 (`01-user-schema`): `Users` keyed by `req.user.id`, which equals `createdBy` on `Expenses`.
 - Existing `Expenses` entity and `ExpenseService` (including `monthlySummary`).
 
 ## Routes
+
 No hand-written routes. CAP derives OData V4 endpoints from the service definition:
+
 - `GET /odata/v4/expenses/Categories` — list seeded categories (with `$expand=subcategories`) — logged-in, read-only
 - `GET /odata/v4/expenses/Subcategories` — list seeded subcategories — logged-in, read-only
 - `GET|POST|PATCH|DELETE /odata/v4/expenses/Expenses` — existing, now accepts and returns `category_ID`, `subcategory_ID`, `notes` — logged-in, own rows only
 - `monthlySummary` — unchanged signature and behaviour
 
 ## Database changes
+
 Changes in `db/schema.cds` (namespace `spendwise`). Verified against the current file: `Expenses : cuid, managed` with `date`, `amount`, `currency`, `description`.
 
 - New `Categories : cuid` — `code : String(30)` (unique, stable key for seed data and clients), `name : localized String(100)` (English and German via `localized`), `subcategories : Composition of many Subcategories on subcategories.category = $self`
@@ -31,6 +36,7 @@ Changes in `db/schema.cds` (namespace `spendwise`). Verified against the current
 - `amount` stays `Decimal(15,2)`; `currency` stays as is (EUR only for now).
 
 Seed data (developer-owned, reference data, not per-user):
+
 - `db/data/spendwise-Categories.csv`, `db/data/spendwise-Categories.texts.csv` (German names)
 - `db/data/spendwise-Subcategories.csv`, `db/data/spendwise-Subcategories.texts.csv`
 - Update `db/data/spendwise-Expenses.csv` with `category_ID`, `subcategory_ID`, `user_ID` for the existing alice and bob rows
@@ -38,17 +44,21 @@ Seed data (developer-owned, reference data, not per-user):
 Existing local SQLite data is re-created from seed by `cds deploy --to sqlite`. No data migration is needed locally. For HANA later, new columns are nullable so a deploy does not break existing rows.
 
 ## Templates
+
 No templates in the Flask sense. The Fiori app in `app/spendwise` is the frontend.
+
 - **Create:** none
 - **Modify:** none required. The Overview page keeps working because `monthlySummary` is unchanged. Showing categories in the UI is a later step.
 
 ## Files to change
+
 - `db/schema.cds` — add `Categories`, `Subcategories`; extend `Expenses`
 - `srv/expense-service.cds` — expose `Categories` and `Subcategories` as `@readonly` projections for any authenticated user; expose the new `Expenses` fields
 - `srv/expense-service.js` — before CREATE/UPDATE on `Expenses`: set `user_ID` from `req.user.id`, ignore any client-supplied value, validate that the subcategory belongs to the category
 - `db/data/spendwise-Expenses.csv` — add category, subcategory and user columns
 
 ## Files to create
+
 - `db/data/spendwise-Categories.csv`
 - `db/data/spendwise-Categories.texts.csv`
 - `db/data/spendwise-Subcategories.csv`
@@ -56,9 +66,11 @@ No templates in the Flask sense. The Fiori app in `app/spendwise` is the fronten
 - `test/expense-service.test.js` — tests for the rules below (reuse whichever test setup step 01 introduces)
 
 ## New dependencies
+
 No new dependencies.
 
 ## Rules for implementation
+
 - Use CDS and the CAP Node.js runtime only. No raw SQL string building and no ORMs. Use CQL with bound parameters.
 - Per-user isolation stays mandatory: the `createdBy = $user` restriction on `Expenses` is unchanged, and the handler never trusts a client-supplied `user_ID`, `createdBy`, or `ID`.
 - `Categories` and `Subcategories` are shared reference data and read-only through the service (`@readonly`). Users cannot create, change or delete them in this step.
@@ -71,6 +83,7 @@ No new dependencies.
 - Use the `sap-cap-capire` skill for CDS guidance.
 
 ## Definition of done
+
 - [ ] `cds watch` starts with no model errors and `cds deploy --to sqlite` creates `spendwise_Categories`, `spendwise_Subcategories` and their `_texts` tables
 - [ ] `GET /odata/v4/expenses/Categories?$expand=subcategories` returns the seeded categories with their subcategories for an authenticated user
 - [ ] The same request with `Accept-Language: de` returns German names

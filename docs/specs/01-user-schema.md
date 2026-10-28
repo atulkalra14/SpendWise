@@ -1,13 +1,17 @@
 # Spec: User Schema
 
 ## Overview
+
 Introduce a `Users` entity in the CAP domain model so SpendWise has a first-class record of each person using the app. Today, per-user isolation relies only on the `createdBy` string that `managed` fills from `req.user.id`; there is no place to keep profile data or preferences (display name, email, UI language, default currency). This step adds that entity, a service to read and maintain the signed-in user's own profile, and automatic profile creation on first request. It is the foundation for later steps (categories, budgets, income, user-defined categories) that need to reference a user. Per the request to store passwords, the entity also holds a salted password hash (never the plain password) so a local sign-in can be built on it later. Note this departs from the CLAUDE.md plan (mocked auth locally, IAS on BTP, where IAS holds the credentials); the hash column is only used by local/custom login and must not be relied on for BTP deployment.
 
 ## Depends on
+
 No previous spec. Builds on the existing `Expenses` entity (`db/schema.cds`) and `ExpenseService` (`srv/expense-service.cds`, `srv/expense-service.js`), whose `createdBy = $user` pattern is reused.
 
 ## Routes
+
 CAP exposes OData V4 endpoints from the service definition (no hand-written routes):
+
 - `GET /odata/v4/users/Me` — returns the signed-in user's profile, creating it on first access — logged-in
 - `PATCH /odata/v4/users/Me` — update `displayName`, `locale`, `defaultCurrency` of own profile — logged-in
 - `POST /odata/v4/users/setPassword` — action taking `newPassword`; sets the caller's own hash only (minimum 12 characters), returns no hash — logged-in
@@ -16,6 +20,7 @@ CAP exposes OData V4 endpoints from the service definition (no hand-written rout
 Implemented as a singleton-style function or restricted entity `Me` in a new `UserService` at `@path: '/odata/v4/users'`. Final shape (function vs. restricted entity) is decided during planning; either must satisfy the rules below.
 
 ## Database changes
+
 New entity in `db/schema.cds` (namespace `spendwise`), based on `managed`:
 
 - `Users`
@@ -32,23 +37,28 @@ No change to `Expenses` in this step (no foreign key yet; `createdBy` already eq
 Seed: `db/data/spendwise-Users.csv` with the mocked local users (alice, bob as configured in the mock auth) for development only. Seed rows carry pre-computed hashes of throwaway dev passwords, never real ones.
 
 ## Templates
+
 No templates. (Fiori/UI5 frontend in `app/spendwise` is unchanged; the planned React app is out of scope.)
 
 ## Files to change
+
 - `db/schema.cds` — add `Users` entity
 - `srv/expense-service.cds` — none expected; only touch if shared types are extracted
 - `package.json` — only if mocked users need configuring (prefer `.cdsrc.json`)
 
 ## Files to create
+
 - `srv/user-service.cds` — `UserService` exposing own-profile access with `@restrict` on `ID = $user`
 - `srv/user-service.js` — handler: create-on-first-access, input validation, ignore client-supplied `ID`
 - `srv/lib/password.js` — `hashPassword(plain)` and `verifyPassword(plain, stored)` using Node's built-in `crypto.scrypt` and `timingSafeEqual`- `db/data/spendwise-Users.csv` — dev seed
 - `test/user-service.test.js` — tests with `cds.test` (adds the project's first test)
 
 ## New dependencies
+
 No new dependencies for hashing (Node's built-in `crypto`; no bcrypt/werkzeug needed). If tests need it, `@cap-js/cds-test` / `jest` as devDependencies, to be agreed first.
 
 ## Rules for implementation
+
 - Use CDS and the CAP Node.js runtime only; no raw SQL string building and no ORMs. Use CQL (`SELECT`, `INSERT`, `UPDATE`) with bound parameters.
 - Per-user isolation is mandatory: `@restrict` with `where: 'ID = $user'` on the entity AND the handler must filter on `req.user.id`. A user must never read or modify another user's row.
 - Never accept `ID` from the client; always derive it from `req.user.id`.
@@ -62,6 +72,7 @@ No new dependencies for hashing (Node's built-in `crypto`; no bcrypt/werkzeug ne
 - Use the `sap-cap-capire` skill for CDS/auth guidance.
 
 ## Definition of done
+
 - [ ] `cds watch` starts without model errors and `cds deploy --to sqlite` creates a `spendwise_Users` table
 - [ ] Authenticated as alice, `GET /odata/v4/users/Me` returns alice's profile (created automatically on first call, then stable on repeat calls)
 - [ ] Authenticated as bob, the same call returns bob's own profile, never alice's

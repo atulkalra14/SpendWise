@@ -9,7 +9,9 @@ const isString = (v) => typeof v === 'string'
 
 // SQLite reports a violated key as SQLITE_CONSTRAINT*; HANA uses error code 301.
 const isDuplicate = (err) =>
-  /^SQLITE_CONSTRAINT/.test(err?.code) || err?.code === 301 || /unique constraint/i.test(err?.message || '')
+  /^SQLITE_CONSTRAINT/.test(err?.code) ||
+  err?.code === 301 ||
+  /unique constraint/i.test(err?.message || '')
 
 module.exports = class RegistrationService extends cds.ApplicationService {
   init() {
@@ -21,7 +23,8 @@ module.exports = class RegistrationService extends cds.ApplicationService {
       const { displayName, email, password, acceptTerms } = req.data
 
       const name = isString(displayName) ? displayName.trim() : ''
-      if (!name || name.length > 100) req.error({ status: 400, message: 'DISPLAYNAME_INVALID', target: 'displayName' })
+      if (!name || name.length > 100)
+        req.error({ status: 400, message: 'DISPLAYNAME_INVALID', target: 'displayName' })
 
       const mail = isString(email) ? normalizeEmail(email) : ''
       if (!mail || mail.length > 255 || !EMAIL_PATTERN.test(mail)) {
@@ -29,10 +32,16 @@ module.exports = class RegistrationService extends cds.ApplicationService {
       }
 
       if (!isString(password) || password.length < PASSWORD_MIN || password.length > PASSWORD_MAX) {
-        req.error({ status: 400, message: 'PASSWORD_LENGTH', target: 'password', args: [PASSWORD_MIN, PASSWORD_MAX] })
+        req.error({
+          status: 400,
+          message: 'PASSWORD_LENGTH',
+          target: 'password',
+          args: [PASSWORD_MIN, PASSWORD_MAX],
+        })
       }
 
-      if (acceptTerms !== true) req.error({ status: 400, message: 'TERMS_REQUIRED', target: 'acceptTerms' })
+      if (acceptTerms !== true)
+        req.error({ status: 400, message: 'TERMS_REQUIRED', target: 'acceptTerms' })
     })
 
     this.on('register', async (req) => {
@@ -46,16 +55,18 @@ module.exports = class RegistrationService extends cds.ApplicationService {
       try {
         // The caller is anonymous, so createdBy/modifiedBy are set explicitly to the new user.
         // The primary key is the duplicate guard, which also covers two parallel registrations.
-        await cds.db.run(INSERT.into(Users).entries({
-          ID,
-          email: ID,
-          displayName,
-          ...(locale && { locale }),
-          passwordHash,
-          termsAcceptedAt: new Date().toISOString(),
-          createdBy: ID,
-          modifiedBy: ID
-        }))
+        await cds.db.run(
+          INSERT.into(Users).entries({
+            ID,
+            email: ID,
+            displayName,
+            ...(locale && { locale }),
+            passwordHash,
+            termsAcceptedAt: new Date().toISOString(),
+            createdBy: ID,
+            modifiedBy: ID,
+          })
+        )
       } catch (err) {
         if (isDuplicate(err)) return req.reject(409, 'REGISTRATION_FAILED')
         log.error('registration failed', err.code)

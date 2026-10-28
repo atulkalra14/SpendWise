@@ -124,44 +124,32 @@
         {
           "name": "landing",
           "pattern": ":?query:",
-          "target": [
-            "landing"
-          ]
+          "target": ["landing"]
         },
         {
           "name": "overview",
           "pattern": "overview",
-          "target": [
-            "overview"
-          ]
+          "target": ["overview"]
         },
         {
           "name": "register",
           "pattern": "register",
-          "target": [
-            "register"
-          ]
+          "target": ["register"]
         },
         {
           "name": "profile",
           "pattern": "profile",
-          "target": [
-            "profile"
-          ]
+          "target": ["profile"]
         },
         {
           "name": "terms",
           "pattern": "terms",
-          "target": [
-            "terms"
-          ]
+          "target": ["terms"]
         },
         {
           "name": "privacy",
           "pattern": "privacy",
-          "target": [
-            "privacy"
-          ]
+          "target": ["privacy"]
         }
       ],
       "targets": {
