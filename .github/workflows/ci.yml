@@ -1,0 +1,22 @@
+# Runs the same checks as the Definition of done in CLAUDE.md. The compile step has no
+# fallback, so a missing or broken model fails the job.
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx cds compile srv --to json > /dev/null
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run i18n:check
+      - run: npm test

@@ -23,7 +23,7 @@ Rules:
 ## 2. Formatting [convention]
 
 - Indent with 2 spaces, no tabs. LF line endings. UTF-8. One final newline. No trailing whitespace (Markdown excepted).
-- Prettier for `*.js`, `*.ts`, `*.json`, `*.yaml`, `*.md`: single quotes, semicolons, print width 100, trailing commas `es5`.
+- Prettier for `*.js`, `*.ts`, `*.json`, `*.yaml`, `*.md`: single quotes, no semicolons (as in CAP's templates and our existing code, see ADR 0002), print width 100, trailing commas `es5`.
 - `*.cds`, `*.xml` (UI5 views) and `*.properties`: follow `.editorconfig`; the CDS editor's formatter may be used for `.cds` **[verify at setup]**.
 - Scripts in `package.json`: `format` (writes) and `format:check` (fails on differences). Only `format:check` runs in checks and CI.
 - Editor: `.vscode/settings.json` formats the Prettier file types on save and applies ESLint fixes; `.vscode/extensions.json` recommends the extensions (SAP CDS language support, ESLint, Prettier, EditorConfig). `.cds`, `.xml` and `.properties` files are not auto-formatted on save. [convention]
@@ -97,7 +97,7 @@ Changing anything in this guide, `.editorconfig`, the Prettier config, an ESLint
 
 ## 8. To verify when the project is created
 
-- `cds add lint` and the CDS ESLint plugin: facet name, generated config, rule set.
-- Prettier together with ESLint: add `eslint-config-prettier` if rules clash.
+- `cds add lint` and the CDS ESLint plugin: **verified 2026-10-28.** The facet is `lint`; it generates `eslint.config.mjs` from `@sap/cds/eslint.config.mjs` and `@sap/eslint-plugin-cds`, and adds `eslint.validate` to `.vscode/settings.json`. It ignores `--dry` and writes files, and it picks `eslint ^10`, which conflicts with the Fiori plugin (`^9`), see ADR 0002.
+- Prettier together with ESLint: **verified 2026-10-28.** No clash with the current rules, so `eslint-config-prettier` is not needed. Re-check if style rules are added to ESLint.
 - Whether the CDS editor's formatter can run in checks, or stays an editor-only aid.
 - `npx @sap-ux/create add eslint-config` inside a CAP project: the generated config location and the `lint` script.

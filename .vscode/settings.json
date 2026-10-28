@@ -30,5 +30,16 @@
         "editor.formatOnSave": true
     },
     "files.insertFinalNewline": true,
-    "files.trimTrailingWhitespace": true
+    "files.trimTrailingWhitespace": true,
+    "eslint.validate": [
+        "cds",
+        "csn",
+        "csv",
+        "csv (semicolon)",
+        "tsv",
+        "tab",
+        "javascript",
+        "typescript",
+        "java"
+    ]
 }

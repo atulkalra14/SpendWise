@@ -4,14 +4,24 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^3",
-    "cds-plugin-ui5": "^0.13.0"
+    "@sap/eslint-plugin-cds": "^4",
+    "cds-plugin-ui5": "^0.13.0",
+    "eslint": "^9",
+    "prettier": "^3"
+  },
+  "engines": {
+    "node": ">=24"
   },
   "workspaces": [
     "app/*"
   ],
   "scripts": {
     "watch-spendwise": "cds watch --open spendwise/index.html?sap-ui-xx-viewCache=false --livereload false",
-    "test": "node --test test/*.test.js",
+    "test": "node --test --experimental-test-coverage --test-coverage-include='srv/**/*.js' --test-coverage-lines=80 'test/**/*.test.js'",
+    "lint": "eslint . && npm run lint --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "i18n:check": "node scripts/check-i18n.js --languages=en,de",
     "deploy-local": "cds deploy --to sqlite:db.sqlite",
     "db:users": "sqlite3 -header -column db.sqlite \"select ID, displayName, email, locale, substr(passwordHash,1,7) as hash, termsAcceptedAt from spendwise_Users;\"",
     "db:update": "node scripts/db-update.js"

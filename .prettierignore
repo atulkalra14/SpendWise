@@ -1,0 +1,8 @@
+node_modules
+gen
+package-lock.json
+.agents
+.claude/skills
+LICENSES
+app/spendwise/webapp/css
+db.sqlite*
