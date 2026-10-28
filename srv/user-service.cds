@@ -1,4 +1,4 @@
-using { spendwise as db } from '../db/schema';
+using { spendwise as db } from '../db';
 
 service UserService @(path: '/odata/v4/users') @(requires: 'authenticated-user') {
 

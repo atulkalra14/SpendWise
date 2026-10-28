@@ -1,4 +1,4 @@
-using { spendwise as db } from '../db/schema';
+using { spendwise as db } from '../db';
 
 service ExpenseService @(path: '/odata/v4/expenses') {
 
