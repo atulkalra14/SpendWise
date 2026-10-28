@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 SpendWise: a personal finance web app (income, expenses, budgets, recurring payments, product-level price tracking) built on SAP CAP (Node.js) with a SAPUI5/Fiori frontend. Existing so far: the `Expenses` entity and per-user `ExpenseService` (with a `monthlySummary` function), a Fiori app in `app/spendwise` (landing page and Overview page backed by `ExpenseService`), a `Users` entity and `UserService`, and a public `RegistrationService` (`register` action) with a `#/register` page in the Fiori app. Registration is for local/custom login only; on BTP, IAS owns sign-up. Specs live in `docs/specs/` and implementation plans in `docs/plans/`. Anything below marked "planned" is a decision, not existing code.
 
-Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA and UI work: no `xs-security.json` or multitenancy yet; the model is one file `db/schema.cds` and services have no `srv/handlers/` split; `app/spendwise` has custom CSS, English-only legal text (`model/legal.js`) and English-only landing page cards (`model/mockData.js`), and its `manifest.json` still needs the version 2 migration reported by `run_ui5_linter`.
+Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA and UI work: no `xs-security.json` or multitenancy yet; the model is one file `db/schema.cds` and services have no `srv/handlers/` split; `app/spendwise` has custom CSS, English-only legal text (`model/legal.js`) and English-only landing page cards (`model/mockData.js`).
 
 ## Project overview
 

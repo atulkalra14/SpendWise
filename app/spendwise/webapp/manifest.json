@@ -1,9 +1,13 @@
 {
-  "_version": "1.83.0",
+  "_version": "2.0.0",
   "sap.app": {
     "id": "spendwise",
     "type": "application",
-    "i18n": "i18n/i18n.properties",
+    "i18n": {
+      "bundleUrl": "i18n/i18n.properties",
+      "supportedLocales": ["", "de"],
+      "fallbackLocale": ""
+    },
     "applicationVersion": {
       "version": "0.0.1"
     },
@@ -21,7 +25,7 @@
         "type": "OData",
         "settings": {
           "annotations": [],
-          "odataVersion": "4.01"
+          "odataVersion": "4.0"
         }
       },
       "registrationService": {
@@ -116,8 +120,6 @@
         "type": "View",
         "viewType": "XML",
         "path": "spendwise.view",
-        "async": true,
-        "viewPath": "spendwise.view",
         "bypassed": {
           "target": "landing"
         }
@@ -184,8 +186,7 @@
     "rootView": {
       "viewName": "spendwise.view.App",
       "type": "XML",
-      "id": "App",
-      "async": true
+      "id": "App"
     }
   }
 }

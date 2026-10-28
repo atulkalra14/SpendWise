@@ -41,7 +41,7 @@
                                         </HBox>
                                         <VBox class="sw-expense-main" renderType="Bare">
                                             <Text text="{description}" class="sw-body-strong"/>
-                                            <Text text="{path: 'date', type: 'sap.ui.model.odata.type.Date', formatOptions: { style: 'medium' }}" class="sw-caption"/>
+                                            <Text core:require="{ DateType: 'sap/ui/model/odata/type/Date' }" text="{path: 'date', type: 'DateType', formatOptions: { style: 'medium' }}" class="sw-caption"/>
                                         </VBox>
                                         <Text text="{parts: ['amount', 'currency_code'], formatter: '.formatter.money'}" class="sw-body-strong sw-tabular"/>
                                     </HBox>
