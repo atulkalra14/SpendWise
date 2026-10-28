@@ -19,12 +19,10 @@ module.exports = class UserService extends cds.ApplicationService {
     // before NEW (draft): refuse to start a profile (USER_PROFILE_CREATE_FORBIDDEN)
     this.before('NEW', 'Me.drafts', (req) => req.reject(405, 'USER_PROFILE_CREATE_FORBIDDEN'))
 
-    // before UPDATE: the key stays the caller's (USER_ID_IMMUTABLE), and only EUR is allowed as
-    // default currency for now (USER_CURRENCY_UNSUPPORTED)
+    // before UPDATE: only EUR is allowed as default currency for now (USER_CURRENCY_UNSUPPORTED).
+    // The key needs no check: it is @readonly, so the framework drops it, and the restriction
+    // `ID = $user` limits every request to the caller's own row.
     this.before('UPDATE', 'Me', (req) => {
-      if (req.data.ID && req.data.ID !== req.user.id) {
-        req.reject(400, 'USER_ID_IMMUTABLE', 'ID')
-      }
       if (req.data.defaultCurrency_code && req.data.defaultCurrency_code !== 'EUR') {
         req.reject(400, 'USER_CURRENCY_UNSUPPORTED', 'defaultCurrency_code')
       }
