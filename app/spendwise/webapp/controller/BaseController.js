@@ -25,7 +25,8 @@ sap.ui.define(
        * Loads the i18n resource bundle of the app, for code that needs many texts at once.
        * @returns {Promise<module:sap/base/i18n/ResourceBundle>} the bundle in the UI language
        */
-      getBundle() {
+      async getBundle() {
+        // The model returns the bundle itself once it is loaded; async always hands back a Promise.
         return this.getOwnerComponent().getModel("i18n").getResourceBundle();
       },
 

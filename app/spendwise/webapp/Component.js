@@ -26,9 +26,12 @@ sap.ui.define(
         // bundle, so the model is filled as soon as the bundle has loaded.
         const oProfile = new JSONModel({});
         this.setModel(oProfile, "profile");
-        this.getModel("i18n")
-          .getResourceBundle()
-          .then((oBundle) => oProfile.setData(mockData.profileData(oBundle)));
+        // getResourceBundle() returns the bundle itself once it is loaded, a Promise before that;
+        // await handles both.
+        (async () => {
+          const oBundle = await this.getModel("i18n").getResourceBundle();
+          oProfile.setData(mockData.profileData(oBundle));
+        })();
 
         // enable routing
         this.getRouter().initialize();
