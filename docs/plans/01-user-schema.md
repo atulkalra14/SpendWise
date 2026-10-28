@@ -1,6 +1,6 @@
-# Plan: User Schema (spec `.claude/specs/01-user-schema.md`, branch `feature/user-schema`)
+# Plan: User Schema (spec `docs/specs/01-user-schema.md`, branch `feature/user-schema`)
 
-Final location once plan mode ends: `.claude/plans/user-schema.md` (copy of this file).
+Final location once plan mode ends: `docs/plans/01-user-schema.md` (copy of this file).
 
 ## Context
 Per-user isolation today relies only on `createdBy` (filled by `managed` from `req.user.id`). There is no user record for profile data or preferences, and later steps (categories, budgets, income) need something to reference. This step adds a `Users` entity keyed by the authenticated user id, a `UserService` for the caller's own profile (auto-created on first access), and a salted scrypt `passwordHash` with a `setPassword` action. Login/registration are out of scope. No code is written until this plan is approved.

@@ -19,7 +19,7 @@ project-root/
 │   ├── settings.json                  # Permissions (deny/ask) and hook registration
 │   ├── agents/
 │   │   ├── reviewer.md                # Code and model review (read-only)
-│   │   ├── test-writer.md             # Writes Jest and cds.test tests
+│   │   ├── test-writer.md             # Writes node:test and cds.test tests
 │   │   └── security-reviewer.md       # Authorization, tenant, XSUAA review (read-only)
 │   ├── hooks/                         # chmod +x
 │   │   ├── block-sensitive-delete.sh  # PreToolUse (Bash): blocks deleting sensitive files
@@ -120,7 +120,7 @@ Rules for this layout:
 ## Phase 1 – Foundation (1 week)
 - [ ] `cds init --nodejs`, `git init`, folder structure above created
 - [ ] `cds add multitenancy,xsuaa` as the target stack requires; decide sidecar vs embedded MTX deliberately (the standard assumes the sidecar)
-- [ ] `package.json`: Jest + `cds.test` configured (CAP does not add it), scripts `test`, `lint`, `format`, `format:check`, `i18n:check`, pinned `@sap/cds` / `@sap/cds-mtxs` versions and `engines`
+- [ ] `package.json`: `node --test` with `cds.test` configured (CAP does not add a runner), scripts `test`, `lint`, `format`, `format:check`, `i18n:check`, pinned `@sap/cds` / `@sap/cds-mtxs` versions and `engines`
 - [ ] Style set up once, as in `docs/style-guide.md`: `.editorconfig` (provided), `.prettierrc`, ESLint with the CDS plugin; confirm the items in its section 8 ("To verify when the project is created") and mark them verified
 - [ ] App baseline decided and recorded in `docs/style-guide.md` (floorplan options, SAPUI5 version, theme `sap_horizon`, content densities); first app created with `fiori-mcp` from it, with `add eslint-config` run once
 - [ ] Test `.claude/settings.json` and both hooks in the team's Claude Code version and OS. Hooks are defense in depth, not a sandbox; the compile hook skips silently when `cds` is missing, so CI must always compile and fail closed
@@ -133,7 +133,7 @@ Rules for this layout:
 - [ ] i18n setup: `_i18n/` with `en` and `de` bundles, `cds.i18n` config, `scripts/check-i18n.js` (provided), npm script `i18n:check` in `package.json`, check added to CI
 - [ ] Two test tenants available locally through the sidecar
 - [ ] One end-to-end hello slice running locally with tests passing
-- [ ] Confirm the rules in `docs/conventions.md` (error handling, logging, IDs, drafts) and `CLAUDE.md` (pull requests). Write an ADR only for a deviation. Verify the message placeholder syntax (`{0}` or named) in `en` and `de`, verify whether the log format carries a request or correlation ID, and set the 80% coverage threshold in the Jest config
+- [ ] Confirm the rules in `docs/conventions.md` (error handling, logging, IDs, drafts) and `CLAUDE.md` (pull requests). Write an ADR only for a deviation. Verify the message placeholder syntax (`{0}` or named) in `en` and `de`, verify whether the log format carries a request or correlation ID, and set the 80% coverage threshold with `--test-coverage-lines` in the `test` script
 
 ## Phase 2 – Domain model (`db/`)
 - [ ] Common aspects and types (`cuid`, `managed`, code lists)
@@ -186,7 +186,7 @@ Rules for this layout:
 - [ ] Human UX review per app
 
 ## Phase 7 – Quality
-- [ ] Unit tests for business logic; the 80% coverage threshold in the Jest config is met
+- [ ] Unit tests for business logic; the 80% coverage threshold in the `test` script is met
 - [ ] Service tests for all OData endpoints
 - [ ] Auth matrix tests complete
 - [ ] Tenant isolation tests (A cannot see B)

@@ -1,4 +1,4 @@
-# Plan: Registration (spec `.claude/specs/03-registration.md`, branch `feature/registration`)
+# Plan: Registration (spec `docs/specs/03-registration.md`, branch `feature/registration`)
 
 ## Context
 Registration is the first step that creates a `Users` row for someone who is not signed in. Today rows come from `ensureUser` (authenticated callers only) and `setPassword` needs an existing user. This step adds a public `RegistrationService` with a `register` action and a Fiori `#/register` page. It creates the account only; sign-in is step 04. No code is written until each step below is confirmed (CLAUDE.md working style).

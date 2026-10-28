@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project state
 
-SpendWise: a personal finance web app (income, expenses, budgets, recurring payments, product-level price tracking) built on SAP CAP (Node.js) with a SAPUI5/Fiori frontend. Existing so far: the `Expenses` entity and per-user `ExpenseService` (with a `monthlySummary` function), a Fiori app in `app/spendwise` (landing page and Overview page backed by `ExpenseService`), a `Users` entity and `UserService`, and, on branch `feature/registration`, a public `RegistrationService` (`register` action) with a `#/register` page in the Fiori app. Registration is for local/custom login only; on BTP, IAS owns sign-up. Specs live in `.claude/specs/` and implementation plans in `.claude/plans/`. Anything below marked "planned" is a decision, not existing code.
+SpendWise: a personal finance web app (income, expenses, budgets, recurring payments, product-level price tracking) built on SAP CAP (Node.js) with a SAPUI5/Fiori frontend. Existing so far: the `Expenses` entity and per-user `ExpenseService` (with a `monthlySummary` function), a Fiori app in `app/spendwise` (landing page and Overview page backed by `ExpenseService`), a `Users` entity and `UserService`, and a public `RegistrationService` (`register` action) with a `#/register` page in the Fiori app. Registration is for local/custom login only; on BTP, IAS owns sign-up. Specs live in `docs/specs/` and implementation plans in `docs/plans/`. Anything below marked "planned" is a decision, not existing code.
+
+Known deviations from the rules below, to be closed by the tooling, i18n, XSUAA and UI work: no `xs-security.json`, multitenancy or CI yet; lint, format and i18n scripts are not in `package.json`; the model is one file `db/schema.cds` and services have no `srv/handlers/` split; `app/spendwise` has custom CSS; the expense and user services still use literal messages.
 
 ## Project overview
 - SAP Cloud Application Programming Model (CAP), Node.js runtime.
@@ -15,7 +17,7 @@ SpendWise: a personal finance web app (income, expenses, budgets, recurring paym
 
 ## Versions and bootstrap
 - Capire currently targets Node.js >= 24, `@sap/cds` 10, `@sap/cds-mtxs` 4. Pin the versions in `package.json` and `engines`; check with `cds version`.
-- A new project starts with `cds init --nodejs`, then `git init`, then `cds add multitenancy,xsuaa` as needed, then a Jest setup (`cds.test` needs Jest; CAP does not add it) and the style tooling from `docs/style-guide.md` (Prettier, ESLint). `npm test`, `npm run lint`, `npm run format:check` and the git-based review commands only work after this.
+- A new project starts with `cds init --nodejs`, then `git init`, then `cds add multitenancy,xsuaa` as needed, then the test setup (`node --test` with `cds.test`; CAP does not add a runner) and the style tooling from `docs/style-guide.md` (Prettier, ESLint). `npm test`, `npm run lint`, `npm run format:check` and the git-based review commands only work after this.
 
 ## Folder layout
 - `db/`   – CDS domain model in `db/schema/`, seed data (`db/data/*.csv`), no logic
@@ -80,7 +82,7 @@ Use the tools in this order when sources disagree: (1) our rules, in this file a
 - Install: `npm ci`
 - Run locally: `npx cds watch`
 - Compile check: `npx cds compile srv --to json > /dev/null`
-- Test: `npm test` (Jest + `cds.test`)
+- Test: `npm test` (`node --test` + `cds.test`)
 - Lint: `npm run lint` (CAP code, JS/TS and every Fiori app; see `docs/style-guide.md`)
 - Format check: `npm run format:check` (fix with `npm run format`)
 - i18n check: `npm run i18n:check` (runs `node scripts/check-i18n.js --languages=en,de`; add new languages to that list). Errors: missing file or key, empty value, placeholder mismatch. Warnings: unused or extra keys.
@@ -134,7 +136,7 @@ We design for AI agents (SAP Joule) now and build agentic features later. Nothin
 - Every business rule in a handler has a service test that asserts the status and the message key. Only the tests in `test/i18n/` assert translated text, in `en` and `de`.
 - Fixtures live in `test/data/`, never in `db/data/`. Each test is independent and resets its data.
 - A bug fix starts with a test that fails for that bug.
-- Coverage target [convention]: 80% of lines for `srv/lib/`, `srv/handlers/` and `srv/common/`, set as a Jest threshold in the Jest config. A change that lowers it must say why.
+- Coverage target [convention]: 80% of lines for `srv/lib/`, `srv/handlers/` and `srv/common/`, enforced with the `--test-coverage-lines` flag of `node --test` in the `test` script. A change that lowers it must say why.
 - Run critical flows against HANA before release; SQLite hides dialect and locking differences.
 
 ## Pull requests

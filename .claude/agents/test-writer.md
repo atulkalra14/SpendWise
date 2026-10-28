@@ -1,6 +1,6 @@
 ---
 name: test-writer
-description: Writes and runs Jest tests for SAP CAP (Node.js) services, handlers and business logic using cds.test. Use when a feature needs tests, ideally before the handler is implemented.
+description: Writes and runs node:test tests for SAP CAP (Node.js) services, handlers and business logic using cds.test. Use when a feature needs tests, ideally before the handler is implemented.
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
 ---
@@ -35,7 +35,7 @@ You write tests for a multitenant SAP CAP (Node.js) project. You write tests onl
 - Use mocked users defined in the dev profile; do not hard-code tokens.
 - Each test is independent and resets data; no ordering dependence. Fixtures go in `test/data/`, never in `db/data/`.
 - Every business rule in a handler gets a service test that asserts the status and the message key. A bug fix starts with a test that fails for that bug.
-- Keep the coverage threshold from the Jest config (80% for `srv/lib/`, `srv/handlers/`, `srv/common/`); report if a change lowers it.
+- Keep the coverage threshold from the `test` script (80% for `srv/lib/`, `srv/handlers/`, `srv/common/`); report if a change lowers it.
 - Assert on behavior (status, payload, DB state), not internal calls.
 - Do not assert on full generated error text; assert on status and message key. The only exception is `test/i18n/`, which asserts the translated text.
 - Comment tests as described in `docs/code-comments.md`: a file header, `describe` and `it` names that read as plain sentences, and a Given / When / Then comment where the setup of an auth, tenant or draft test is not obvious.

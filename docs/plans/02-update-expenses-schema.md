@@ -1,6 +1,6 @@
-# Plan: Update Expenses Schema (spec `.claude/specs/02-update-expenses-schema.md`, branch `feature/update-expenses-schema`)
+# Plan: Update Expenses Schema (spec `docs/specs/02-update-expenses-schema.md`, branch `feature/update-expenses-schema`)
 
-Final location once plan mode ends: `.claude/plans/02-update-expenses-schema.md` (copy of this file, the first action after approval). No code is written until this plan is approved. Each step is still proposed and explained before files are touched (CLAUDE.md working style).
+Final location once plan mode ends: `docs/plans/02-update-expenses-schema.md` (copy of this file, the first action after approval). No code is written until this plan is approved. Each step is still proposed and explained before files are touched (CLAUDE.md working style).
 
 ## Context
 `Expenses` has only `date`, `amount`, `currency`, `description`, which cannot support budgets, dashboards or analytics. This step adds developer-seeded `Categories`/`Subcategories` (English and German), links expenses to them, adds `notes` and a `user` link to `Users`, and exposes the reference data read-only through `ExpenseService`. `monthlySummary`, per-user isolation (`createdBy = $user`) and integer-cents money math stay untouched.
