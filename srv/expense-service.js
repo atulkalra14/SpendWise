@@ -1,3 +1,5 @@
+// Handlers for ExpenseService: per-user expense rules and the monthlySummary function.
+// Messages are keys from _i18n/messages*.properties; the key is also the error code clients see.
 const cds = require('@sap/cds')
 const ensureUser = require('./lib/ensure-user')
 
@@ -12,8 +14,9 @@ module.exports = class ExpenseService extends cds.ApplicationService {
   init() {
     const { Expenses, Categories, Subcategories } = this.entities
 
-    // Expenses are draft-enabled, so these checks run on SAVE: when a draft is activated, or on a
-    // direct CREATE/UPDATE. Editing a draft is not validated until the user saves it.
+    // before SAVE: set the owner and check category and subcategory (EXPENSE_CATEGORY_NOT_FOUND,
+    // EXPENSE_SUBCATEGORY_*). Expenses are draft-enabled, so this runs when a draft is activated or
+    // on a direct CREATE/UPDATE; editing a draft is not validated until the user saves it.
     this.before('SAVE', 'Expenses', async (req) => {
       await ensureUser(req)
       req.data.user_ID = req.user.id
@@ -40,12 +43,7 @@ module.exports = class ExpenseService extends cds.ApplicationService {
           SELECT.one.from(Categories).columns('ID').where({ ID: category_ID })
         )
         if (!category)
-          req.error({
-            status: 400,
-            code: 'CATEGORY_NOT_FOUND',
-            message: 'Category does not exist',
-            target: 'category_ID',
-          })
+          req.error({ status: 400, message: 'EXPENSE_CATEGORY_NOT_FOUND', target: 'category_ID' })
       }
 
       if (subcategory_ID) {
@@ -55,32 +53,31 @@ module.exports = class ExpenseService extends cds.ApplicationService {
         if (!sub) {
           req.error({
             status: 400,
-            code: 'SUBCATEGORY_NOT_FOUND',
-            message: 'Subcategory does not exist',
+            message: 'EXPENSE_SUBCATEGORY_NOT_FOUND',
             target: 'subcategory_ID',
           })
         } else if (!category_ID) {
           req.error({
             status: 400,
-            code: 'SUBCATEGORY_REQUIRES_CATEGORY',
-            message: 'A subcategory needs a category',
+            message: 'EXPENSE_SUBCATEGORY_REQUIRES_CATEGORY',
             target: 'category_ID',
           })
         } else if (sub.category_ID !== category_ID) {
           req.error({
             status: 400,
-            code: 'SUBCATEGORY_CATEGORY_MISMATCH',
-            message: 'Subcategory does not belong to the category',
+            message: 'EXPENSE_SUBCATEGORY_CATEGORY_MISMATCH',
             target: 'subcategory_ID',
           })
         }
       }
     })
 
+    // on monthlySummary: totals of one calendar month; rejects a bad month (EXPENSE_MONTH_FORMAT)
+    // and mixed currencies (EXPENSE_CURRENCY_UNSUPPORTED)
     this.on('monthlySummary', async (req) => {
       const { month } = req.data
       const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(month || '')
-      if (!match) return req.reject(400, 'month must be formatted as YYYY-MM')
+      if (!match) return req.reject(400, 'EXPENSE_MONTH_FORMAT', 'month')
 
       const year = Number(match[1])
       const mon = Number(match[2])
@@ -98,7 +95,7 @@ module.exports = class ExpenseService extends cds.ApplicationService {
 
       // Single currency (EUR) for now. Refuse to add up mixed currencies.
       if (rows.some((r) => r.currency_code !== 'EUR')) {
-        return req.reject(501, 'Totals for currencies other than EUR are not supported yet')
+        return req.reject(501, 'EXPENSE_CURRENCY_UNSUPPORTED')
       }
 
       let total = 0
