@@ -20,7 +20,8 @@ For registration in production: **(a)** leave it public, **(b)** guard the handl
 
 - Option 2. The CDS role is `User`; services use `@requires: 'User'` and `@restrict … to: 'User'`.
 - `xs-security.json` has `xsappname: spendwise`, `tenant-mode: dedicated`, scope `$XSAPPNAME.User`, role template `User` and role collection "SpendWise User". Scope names are not changed after release. Multitenancy later changes the tenant mode, not the scope names.
-- In production, `srv/server.js` sets `@protocol: 'none'` on `RegistrationService` (`srv/lib/production.js`). It stays public in development.
+- Both services carry `@(requires: 'User')` on the service declaration, so the metadata document and auto-exposed code lists (such as `Currencies`) are protected too, and an entity added later is protected by default.
+- `RegistrationService` is served only with local login outside production (fail closed): `srv/server.js` sets `@protocol: 'none'` on it unless the profile is not `production` and the auth kind is `mocked` or `basic` (`srv/lib/production.js`). CAP adds the `development` profile to any profile that is not `production` (so `hybrid` or a mistyped name count as development), so the decision is based on the auth kind, not on the profile name alone.
 - Local development: `.cdsrc.json` gives the mocked users alice, bob, carol, dave and erin the role `User`; fred has no role and is the negative test case.
 - A test keeps `xs-security.json` in step with the roles found by `cds compile srv --to xsuaa`.
 
@@ -31,6 +32,14 @@ Harder: every new role must be added to the CDS model and `xs-security.json` tog
 Changes: `@sap/xssec` and `@sap/cds-dk` are dependencies (see ADR 0002 for `@eslint/js`), `package.json` and `.cdsrc.json` are updated, and the service annotations use `User`.
 Not part of this decision: an approuter, `mta.yaml`, redirect URIs, and the UI login. The sign-in button still opens the home page.
 
+Follow-ups for the deployment and multitenancy work (from the security review of this change):
+
+- Make `xsappname` unique per space or org in `mta.yaml`, so dev and production in one subaccount do not clash.
+- With multitenancy, use `cds add multitenancy` to merge the `shared` tenant mode and the callback scopes, keep the scope name `User`, and update `test/auth/xs-security.test.js`, which pins `dedicated`. Check that `cds.on('loaded')` does not reopen registration for tenant models.
+- Add `oauth2-configuration.redirect-uris` with the approuter.
+- The `#/register` page and its landing link still exist in the app and fail in production. Hide them when registration is off.
+- A draft lock reveals the user ID of the lock holder (CAP behaviour, reachable only with an unguessable UUID). With XSUAA the ID is usually an email address, so include it in the privacy review.
+
 ## Verification
 
-`test/auth/roles.test.js` checks every endpoint for anonymous (401), a user without the role (403) and a user with it (success). A server started with `CDS_ENV=production` returns 404 for registration while `ExpenseService` and `UserService` keep running. It has not been run against a real XSUAA instance, so the first deployment needs a check with a real token.
+`test/auth/roles.test.js` checks the metadata documents, the auto-exposed code list and every endpoint for anonymous (401), a user without the role (403) and a user with it (success). It also checks that a user without the role cannot change, delete or start a draft of anything, and that a second user cannot touch another user's draft or expense. `test/auth/registration-closed.test.js` starts real servers: in the production profile and with a non-local auth kind registration returns 404 while the other services keep running and stay protected, and in development with local login it is served. These used mocked and dummy auth, because there is no XSUAA binding here; it has not been run against a real XSUAA instance, so the first deployment needs a check with a real token.

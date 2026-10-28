@@ -44,10 +44,10 @@ Only associations cross context boundaries. List each one and its direction.
 
 Roles are defined by the CDS model and mirrored in `xs-security.json` (see ADR 0004). Details are in the `@requires` / `@restrict` annotations of `srv/`.
 
-| Role   | Who                                                               | Can read                                 | Can change                                                                             |
-| ------ | ----------------------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------- |
-| `User` | Every signed-in SpendWise user (role collection "SpendWise User") | Own expenses and own profile; categories | Own expenses and own profile (through drafts); own password                            |
-| `any`  | Anyone, including anonymous; development only                     | Nothing                                  | Calls `register` only, to create an account. The service is switched off in production |
+| Role   | Who                                                               | Can read                                 | Can change                                                                                                  |
+| ------ | ----------------------------------------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `User` | Every signed-in SpendWise user (role collection "SpendWise User") | Own expenses and own profile; categories | Own expenses and own profile (through drafts); own password                                                 |
+| `any`  | Anyone, including anonymous; development only                     | Nothing                                  | Calls `register` only, to create an account. The service is served only with local login outside production |
 
 ## Glossary
 

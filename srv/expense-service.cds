@@ -4,7 +4,7 @@ using { spendwise as db } from '../db';
  * Expenses of the signed-in user, the shared categories, and the monthly summary.
  * Every endpoint needs the role `User` (a signed-in SpendWise user, see docs/domain-model.md).
  */
-service ExpenseService @(path: '/odata/v4/expenses') {
+service ExpenseService @(path: '/odata/v4/expenses') @(requires: 'User') {
 
   // A user may do everything with their own expenses and nothing with anyone else's.
   @restrict: [{ grant: '*', to: 'User', where: 'createdBy = $user' }]

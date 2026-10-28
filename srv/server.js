@@ -1,8 +1,9 @@
-// Custom server bootstrap: applies the rules that only hold in production.
+// Custom server bootstrap: decides where the public registration endpoint is served.
 const cds = require('@sap/cds')
-const { disableRegistration } = require('./lib/production')
+const { registrationAllowed, disableRegistration } = require('./lib/production')
 
-// on loaded (production only): close the public registration endpoint, see srv/lib/production.js
-if (cds.env.profiles.includes('production')) cds.on('loaded', disableRegistration)
+// on loaded: close registration unless local login is used outside production (fail closed),
+// see srv/lib/production.js and ADR 0004
+if (!registrationAllowed(cds.env)) cds.on('loaded', disableRegistration)
 
 module.exports = cds.server
