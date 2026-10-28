@@ -1,0 +1,85 @@
+{
+    "permissions": {
+        "allow": [
+            "mcp__cds-mcp",
+            "mcp__fiori-mcp__search_docs",
+            "mcp__fiori-mcp__list_fiori_apps",
+            "mcp__fiori-mcp__list_functionality",
+            "mcp__fiori-mcp__get_functionality_details",
+            "mcp__ui5-mcp__get_guidelines",
+            "mcp__ui5-mcp__get_api_reference",
+            "mcp__ui5-mcp__get_project_info",
+            "mcp__ui5-mcp__get_version_info",
+            "mcp__ui5-mcp__run_manifest_validation"
+        ],
+        "deny": [
+            "Read(./.env)",
+            "Read(./.env.*)",
+            "Read(./default-env.json)",
+            "Read(./default-services.json)",
+            "Read(./**/*.key)",
+            "Read(./**/*.pem)",
+            "Read(./**/*.p12)",
+            "Edit(./.env)",
+            "Edit(./.env.*)",
+            "Write(./.env)",
+            "Write(./.env.*)",
+            "Edit(./default-env.json)",
+            "Write(./default-env.json)",
+            "Edit(./gen/**)",
+            "Write(./gen/**)",
+            "Bash(cat .env:*)",
+            "Bash(cat default-env.json:*)"
+        ],
+        "ask": [
+            "Edit(./xs-security.json)",
+            "Write(./xs-security.json)",
+            "Edit(./package.json)",
+            "Write(./package.json)",
+            "Edit(./.editorconfig)",
+            "Write(./.editorconfig)",
+            "Edit(./.prettierrc*)",
+            "Write(./.prettierrc*)",
+            "Edit(./eslint.config.*)",
+            "Write(./eslint.config.*)",
+            "Edit(./app/**/eslint.config.*)",
+            "Write(./app/**/eslint.config.*)",
+            "Edit(./app/**/ui5.yaml)",
+            "Write(./app/**/ui5.yaml)",
+            "Edit(./docs/style-guide.md)",
+            "Write(./docs/style-guide.md)",
+            "Edit(./CLAUDE.md)",
+            "Write(./CLAUDE.md)",
+            "Edit(./.claude/**)",
+            "Write(./.claude/**)",
+            "Bash(rm:*)",
+            "Bash(git clean:*)",
+            "Bash(git reset --hard:*)",
+            "Bash(git push:*)"
+        ]
+    },
+    "hooks": {
+        "PreToolUse": [
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/block-sensitive-delete.sh"
+                    }
+                ]
+            }
+        ],
+        "PostToolUse": [
+            {
+                "matcher": "Edit|Write|MultiEdit",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/cds-compile-check.sh"
+                    }
+                ]
+            }
+        ]
+    }
+}

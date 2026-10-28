@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "SAPSE.vscode-cds",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "EditorConfig.EditorConfig"
+  ]
+}
