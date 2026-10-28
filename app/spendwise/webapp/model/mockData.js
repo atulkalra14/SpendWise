@@ -1,159 +1,158 @@
-sap.ui.define(["sap/ui/model/json/JSONModel"], (JSONModel) => {
+sap.ui.define(["sap/base/i18n/Localization"], (Localization) => {
   "use strict";
 
-  // Sample content for the design pages only. Real data will come from the CAP services,
-  // and amounts are pre-formatted strings here so no money math happens in the UI.
+  // Sample content for the design pages only. Real data will come from the CAP services.
+  // Every text comes from the i18n bundle, so the pages read correctly in each language; names,
+  // numbers and device names below are sample data, not translatable text. The functions return
+  // plain objects, and the controllers put them into JSON models once the bundle is loaded.
+
+  const fmtMoney = (nAmount) =>
+    new Intl.NumberFormat(Localization.getLanguage(), {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0
+    }).format(nAmount);
+
+  // A sample budget row: "€312 / €400" in English, "312 € / 400 €" in German.
+  const fmtBudget = (nUsed, nLimit) => `${fmtMoney(nUsed)} / ${fmtMoney(nLimit)}`;
+
+  // The landing cards share one shape; only the key prefix differs.
+  const feature = (oBundle, sPrefix, mFixed) => ({
+    ...mFixed,
+    title: oBundle.getText(`${sPrefix}Title`),
+    text: oBundle.getText(`${sPrefix}Text`),
+    intro: oBundle.getText(`${sPrefix}Intro`),
+    points: [1, 2, 3, 4].map((n) => oBundle.getText(`${sPrefix}Point${n}`)),
+    note: oBundle.getText(`${sPrefix}Note`)
+  });
+
   return {
-    createLandingModel() {
-      return new JSONModel({
+    /**
+     * Data of the landing page: the preview budgets and the feature cards.
+     * @param {module:sap/base/i18n/ResourceBundle} oBundle the loaded i18n bundle
+     * @returns {object} data for the "landing" model
+     */
+    landingData(oBundle) {
+      const sAvailable = oBundle.getText("featureStatusAvailable");
+      const sSoon = oBundle.getText("featureStatusSoon");
+      return {
         previewBudgets: [
-          { label: "Groceries", amount: "€312 / €400", pct: 78, state: "ok" },
-          { label: "Dining", amount: "€190 / €200", pct: 95, state: "warning" },
-          { label: "Transport", amount: "€85 / €150", pct: 57, state: "ok" }
+          {
+            label: oBundle.getText("previewBudgetGroceries"),
+            amount: fmtBudget(312, 400),
+            pct: 78,
+            state: "ok"
+          },
+          {
+            label: oBundle.getText("previewBudgetDining"),
+            amount: fmtBudget(190, 200),
+            pct: 95,
+            state: "warning"
+          },
+          {
+            label: oBundle.getText("previewBudgetTransport"),
+            amount: fmtBudget(85, 150),
+            pct: 57,
+            state: "ok"
+          }
         ],
         features: [
-          {
+          feature(oBundle, "featureIncome", {
             icon: "sap-icon://money-bills",
             tone: "emerald",
-            title: "Income and expenses",
-            text: "Log every transaction in seconds and see exactly where your money goes.",
-            status: "Available",
-            statusState: "success",
-            intro:
-              "Record what comes in and what goes out, so you always know where your money went.",
-            points: [
-              "Add each transaction with an amount, date, category and an optional note.",
-              "Amounts are stored and calculated as exact decimal values in euros, so totals always add up to the cent.",
-              "Review your transactions by month and see a summary of income, expenses and what is left.",
-              "Edit or delete an entry at any time. Your history stays under your control."
-            ],
-            note: "Amounts are entered by you. SpendWise does not connect to your bank and never moves money."
-          },
-          {
+            status: sAvailable,
+            statusState: "success"
+          }),
+          feature(oBundle, "featureBudgets", {
             icon: "sap-icon://target-group",
             tone: "blue",
-            title: "Budgets that nudge",
-            text: "Set limits per category and get a warning before you overspend.",
-            status: "Coming soon",
-            statusState: "warning",
-            intro:
-              "Set a monthly limit for the categories that matter to you and keep spending on track.",
-            points: [
-              "Choose a monthly limit for each category, such as groceries, dining or transport.",
-              "A progress bar shows how much of each limit you have used so far this month.",
-              "You get a warning when a category reaches 90% of its limit, before you go over it.",
-              "Budgets are planning tools. They never block a transaction."
-            ],
-            note: "Budgets are not available yet. This describes how the feature is planned to work."
-          },
-          {
+            status: sSoon,
+            statusState: "warning"
+          }),
+          feature(oBundle, "featureSavings", {
             icon: "sap-icon://trend-up",
             tone: "amber",
-            title: "Savings you can see",
-            text: "Income minus expenses, calculated for you, plus a way to set money aside on purpose.",
-            status: "Coming soon",
-            statusState: "warning",
-            intro: "See how much you keep each month, and set money aside deliberately.",
-            points: [
-              "Savings are calculated for you as income minus expenses. You never enter them by hand.",
-              "Your savings rate shows what share of your income you kept.",
-              'A separate "transfer to savings" entry lets you record money you set aside on purpose.',
-              "Everything is calculated in your account currency, using exact decimal math."
-            ],
-            note: "SpendWise shows your own numbers. It does not give financial, investment or tax advice."
-          },
-          {
+            status: sSoon,
+            statusState: "warning"
+          }),
+          feature(oBundle, "featurePrices", {
             icon: "sap-icon://tag",
             tone: "purple",
-            title: "Product price history",
-            text: "Follow what the things you buy regularly cost over time.",
-            status: "Coming soon",
-            statusState: "warning",
-            intro: "Track the prices of products you buy often and notice when they change.",
-            points: [
-              "Link a purchase to a product, such as a brand of coffee or a monthly transport pass.",
-              "See a price history over time, with the lowest and highest price you paid.",
-              "Spot price increases early and compare what you paid at different stores.",
-              "Price drop alerts are optional and can be switched off in your profile."
-            ],
-            note: "Prices come from the purchases you log yourself. SpendWise does not collect prices from other websites."
-          },
-          {
+            status: sSoon,
+            statusState: "warning"
+          }),
+          feature(oBundle, "featureRecurring", {
             icon: "sap-icon://synchronize",
             tone: "navy",
-            title: "Recurring payments",
-            text: "Keep subscriptions and bills in one place so nothing surprises you.",
-            status: "Coming soon",
-            statusState: "warning",
-            intro:
-              "Keep your subscriptions, rent and bills in one list so nothing catches you off guard.",
-            points: [
-              "Add a payment once and set how often it repeats: weekly, monthly or yearly.",
-              "See your total fixed costs per month and the next due date for each payment.",
-              "Optional reminders arrive two days before a payment is due.",
-              "Pause or end a recurring payment whenever you cancel it."
-            ],
-            note: "SpendWise only records and reminds. It never pays a bill or cancels a subscription for you."
-          },
-          {
+            status: sSoon,
+            statusState: "warning"
+          }),
+          feature(oBundle, "featurePrivacy", {
             icon: "sap-icon://locked",
             tone: "red",
-            title: "Private by design",
-            text: "Your data is isolated to your account. Only you can see it.",
-            status: "Available",
-            statusState: "success",
-            intro:
-              "Your financial data belongs to you. SpendWise is built so that only you can see it.",
-            points: [
-              "Every record is tied to your account, and the server only returns your own data.",
-              "Passwords are never stored as plain text. Only a salted hash is kept, and it is never sent to the app.",
-              "We do not sell your data or use it for advertising.",
-              "Our Privacy Policy explains what we collect and the rights you have over it."
-            ],
-            note: "Read the Terms of Service and Privacy Policy linked in the footer for the full details."
-          }
+            status: sAvailable,
+            statusState: "success"
+          })
         ]
-      });
+      };
     },
 
-    // Stat cards read from a "kpi" model with { items: [...] }, shared by Profile and Overview.
-    createProfileStatsModel() {
-      return new JSONModel({
+    /**
+     * Stat cards of the profile page, read from a "kpi" model with { items: [...] }.
+     * @param {module:sap/base/i18n/ResourceBundle} oBundle the loaded i18n bundle
+     * @returns {object} data for the "kpi" model
+     */
+    profileStatsData(oBundle) {
+      const sLocale = Localization.getLanguage();
+      return {
         items: [
           {
-            label: "Member since",
-            value: "Mar 2026",
-            hint: "7 months with SpendWise",
+            label: oBundle.getText("statMemberSince"),
+            value: new Intl.DateTimeFormat(sLocale, {
+              month: "short",
+              year: "numeric",
+              timeZone: "UTC"
+            }).format(new Date(Date.UTC(2026, 2, 1))),
+            hint: oBundle.getText("statMemberSinceHint", [7]),
             icon: "sap-icon://calendar",
             tone: "blue"
           },
           {
-            label: "Transactions",
-            value: "412",
-            hint: "Logged so far",
+            label: oBundle.getText("statTransactions"),
+            value: new Intl.NumberFormat(sLocale).format(412),
+            hint: oBundle.getText("statTransactionsHint"),
             icon: "sap-icon://receipt",
             tone: "navy"
           },
           {
-            label: "Savings rate",
-            value: "40.6%",
-            hint: "This month",
+            label: oBundle.getText("statSavingsRate"),
+            value: new Intl.NumberFormat(sLocale, {
+              style: "percent",
+              maximumFractionDigits: 1
+            }).format(0.406),
+            hint: oBundle.getText("statSavingsRateHint"),
             icon: "sap-icon://trend-up",
             tone: "emerald"
           },
           {
-            label: "Active budgets",
+            label: oBundle.getText("statActiveBudgets"),
             value: "4",
-            hint: "1 near its limit",
+            hint: oBundle.getText("statActiveBudgetsHint", [1]),
             icon: "sap-icon://target-group",
             tone: "amber"
           }
         ]
-      });
+      };
     },
 
-    createProfileModel() {
-      return new JSONModel({
+    /**
+     * The sample profile: personal details, preferences, toggles and sessions.
+     * @param {module:sap/base/i18n/ResourceBundle} oBundle the loaded i18n bundle
+     * @returns {object} data for the "profile" model
+     */
+    profileData(oBundle) {
+      const sPlace = oBundle.getText("sessionLocationBerlin");
+      return {
         initials: "SJ",
         firstName: "Sarah",
         lastName: "Johnson",
@@ -168,54 +167,53 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], (JSONModel) => {
         weekStart: "monday",
         securityToggles: [
           {
-            title: "Two-factor authentication",
-            description: "Ask for a verification code when you sign in on a new device.",
+            title: oBundle.getText("securityTwoFactorTitle"),
+            description: oBundle.getText("securityTwoFactorDescription"),
             enabled: true
           },
           {
-            title: "Sign-in alerts",
-            description: "Email me when a new device signs in to my account.",
+            title: oBundle.getText("securitySignInAlertsTitle"),
+            description: oBundle.getText("securitySignInAlertsDescription"),
             enabled: true
           }
         ],
         notifications: [
           {
-            title: "Budget alerts",
-            description: "Tell me when a category reaches 90% of its limit.",
+            title: oBundle.getText("notifyBudgetsTitle"),
+            description: oBundle.getText("notifyBudgetsDescription"),
             enabled: true
           },
           {
-            title: "Weekly summary",
-            description:
-              "A short email every Monday with last week's income, expenses and savings.",
+            title: oBundle.getText("notifyWeeklyTitle"),
+            description: oBundle.getText("notifyWeeklyDescription"),
             enabled: true
           },
           {
-            title: "Price drop alerts",
-            description: "Notify me when a tracked product gets cheaper.",
+            title: oBundle.getText("notifyPricesTitle"),
+            description: oBundle.getText("notifyPricesDescription"),
             enabled: false
           },
           {
-            title: "Recurring payment reminders",
-            description: "Remind me two days before a recurring payment is due.",
+            title: oBundle.getText("notifyRecurringTitle"),
+            description: oBundle.getText("notifyRecurringDescription"),
             enabled: true
           }
         ],
         sessions: [
           {
             device: "MacBook Pro, Chrome",
-            meta: "Berlin, Germany · Active now",
+            meta: `${sPlace} · ${oBundle.getText("sessionActiveNow")}`,
             icon: "sap-icon://laptop",
             current: true
           },
           {
             device: "iPhone 15, Safari",
-            meta: "Berlin, Germany · 2 hours ago",
+            meta: `${sPlace} · ${oBundle.getText("sessionHoursAgo", [2])}`,
             icon: "sap-icon://iphone",
             current: false
           }
         ]
-      });
+      };
     }
   };
 });

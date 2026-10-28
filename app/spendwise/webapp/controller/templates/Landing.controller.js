@@ -12,24 +12,41 @@ sap.ui.define(
 
     return BaseController.extend("spendwise.controller.templates.Landing", {
       onInit() {
-        this.getView().setModel(mockData.createLandingModel(), "landing");
+        // The card texts come from the i18n bundle, so the model is filled once it has loaded.
+        const oLanding = new JSONModel({ previewBudgets: [], features: [] });
+        this.getView().setModel(oLanding, "landing");
+        this.getBundle().then((oBundle) => oLanding.setData(mockData.landingData(oBundle)));
         this.getView().setModel(new JSONModel(Device), "device");
         this.getView().setModel(new JSONModel({}), "feature");
       },
 
-      // The cards are plain layout controls, so clicks and Enter/Space are handled on the grid
-      // and mapped back to the card's binding context.
+      // The cards appear after the view is first rendered, so the grid is decorated again every
+      // time the grid itself renders.
       onAfterRendering() {
         const oGrid = this.byId("featureGrid");
+        if (oGrid && !this._bGridDelegate) {
+          this._bGridDelegate = true;
+          oGrid.addEventDelegate({ onAfterRendering: () => this._decorateGrid() });
+        }
+        this._decorateGrid();
+      },
+
+      // The cards are plain layout controls, so clicks and Enter/Space are handled on the grid
+      // and mapped back to the card's binding context.
+      _decorateGrid() {
+        const oGrid = this.byId("featureGrid");
         const oDom = oGrid && oGrid.getDomRef();
-        if (!oDom || oDom.dataset.swBound) {
+        if (!oDom) {
           return;
         }
-        oDom.dataset.swBound = "true";
         oDom.querySelectorAll(".sw-feature").forEach((oCard) => {
           oCard.setAttribute("tabindex", "0");
           oCard.setAttribute("role", "button");
         });
+        if (oDom.dataset.swBound) {
+          return;
+        }
+        oDom.dataset.swBound = "true";
         oDom.addEventListener("click", (oEvent) => this._onFeatureActivate(oEvent));
         oDom.addEventListener("keydown", (oEvent) => {
           if (oEvent.key === "Enter" || oEvent.key === " ") {

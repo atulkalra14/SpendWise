@@ -21,9 +21,16 @@ sap.ui.define(
         this.getRouter().navTo(sRoute);
       },
 
+      /**
+       * Loads the i18n resource bundle of the app, for code that needs many texts at once.
+       * @returns {Promise<module:sap/base/i18n/ResourceBundle>} the bundle in the UI language
+       */
+      getBundle() {
+        return this.getOwnerComponent().getModel("i18n").getResourceBundle();
+      },
+
       async getText(sKey, aArgs) {
-        const oBundle = await this.getOwnerComponent().getModel("i18n").getResourceBundle();
-        return oBundle.getText(sKey, aArgs);
+        return (await this.getBundle()).getText(sKey, aArgs);
       },
 
       /**
